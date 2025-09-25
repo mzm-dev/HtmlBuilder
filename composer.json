@@ -1,0 +1,30 @@
+{
+    "name": "mzm/html-builder",
+    "description": "A Livewire-based form builder package for Laravel.",
+    "type": "library",
+    "license": "MIT",
+    "version": "1.0.0",
+    "authors": [
+        {
+            "name": "Zaki Mustafa",
+            "email": "mohdzaki04@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Mzm\\HtmlBuilder\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Mzm\\HtmlBuilder\\HtmlBuilderServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^8.2",
+        "livewire/livewire": "^3.6.4"
+    }
+}
