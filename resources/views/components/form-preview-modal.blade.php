@@ -32,7 +32,7 @@
                 <form>
                     <div class="grid grid-cols-3 gap-4">
                         @foreach ($formElements as $element)
-                            <div class="col-span-3 mb-4 rounded-lg">
+                            <div class="col-span-3 mb-1 rounded-lg">
                                 @if ($element['type'] === 'text-input')
                                     <x-mzm-html-builder::elements.text-input :element="$element" />
                                 @elseif($element['type'] === 'email')

@@ -24,9 +24,7 @@
 
             <form wire:submit.prevent="saveElement" class="flex-grow overflow-y-auto px-8 py-4">
                 {{-- Common fields --}}
-                <div class="mb-4">
-                    <x-mzm-html-builder::options.label />
-                </div>
+                <x-mzm-html-builder::options.label />
                 @if ($editingElementData['type'] === 'text-block')
                     <x-mzm-html-builder::options.text-block :editingElementData="$editingElementData" />
                 @elseif ($editingElementData['type'] === 'number-input')

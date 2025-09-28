@@ -128,7 +128,7 @@
                 @else
                     @foreach ($formElements as $element)
                         <div
-                            class="mb-4 border border-gray-300 p-4 rounded-lg hover:border-blue-500 hover:shadow-md transition-all duration-200 relative group items-start">
+                            class="mb-1 border border-gray-300 p-4 rounded-lg hover:border-blue-500 hover:shadow-md transition-all duration-200 relative group items-start">
                             <!-- Clickable Area for Editing -->
                             <div class="flex flex-row ms-3 mb-1 float-right space-x-1">
                                 <!-- Up Handle -->
