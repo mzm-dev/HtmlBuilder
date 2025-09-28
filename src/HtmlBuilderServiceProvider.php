@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 use Mzm\HtmlBuilder\Http\Livewire\FormBuilder;
+use Mzm\HtmlBuilder\Http\Livewire\FormViewer;
+use Mzm\HtmlBuilder\Http\Livewire\FormList;
 
 class HtmlBuilderServiceProvider extends ServiceProvider
 {
@@ -13,6 +15,8 @@ class HtmlBuilderServiceProvider extends ServiceProvider
     {
         // Register the Livewire component
         Livewire::component('mzm-html-builder::form-builder', FormBuilder::class);
+        Livewire::component('mzm-html-builder::form-viewer', FormViewer::class);
+        Livewire::component('mzm-html-builder::form-list', FormList::class);
 
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'mzm-html-builder');
 

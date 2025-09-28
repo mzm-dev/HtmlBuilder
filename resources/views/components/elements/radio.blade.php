@@ -1,5 +1,5 @@
 <div class="flex flex-col gap-2">
-    <x-mzm-html-builder::label :element="$element" />
+    <x-mzm-html-builder::elements.label :element="$element" />
     @foreach ($element['options'] as $key => $option)
         <div
             class="flex items-center justify-start gap-2 font-medium text-neutral-600 has-disabled:opacity-75 dark:text-neutral-300">

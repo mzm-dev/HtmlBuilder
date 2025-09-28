@@ -1,5 +1,5 @@
 <div class="relative flex w-full max-w flex-col gap-1 text-neutral-600 dark:text-neutral-300">
-    <x-mzm-html-builder::label :element="$element" />
+    <x-mzm-html-builder::elements.label :element="$element" />
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
         class="absolute pointer-events-none right-4 top-8 size-5">
         <path fill-rule="evenodd"

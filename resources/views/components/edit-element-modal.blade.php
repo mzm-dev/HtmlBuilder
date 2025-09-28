@@ -25,138 +25,21 @@
             <form wire:submit.prevent="saveElement" class="flex-grow overflow-y-auto px-8 py-4">
                 {{-- Common fields --}}
                 <div class="mb-4">
-                    <label for="label" class="block text-gray-700 font-semibold mb-2">Label</label>
-                    <input type="text" wire:model.defer="editingElementData.label" id="label"
-                        class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
-                    @error('editingElementData.label')
-                        <span class="text-red-500 text-sm">{{ $message }}</span>
-                    @enderror
+                    <x-mzm-html-builder::options.label />
                 </div>
-
                 @if ($editingElementData['type'] === 'text-block')
-                    <div class="mb-4">
-                        <label for="header_attr" class="block text-gray-700 font-semibold mb-2">Tag</label>
-                        <select wire:model.defer="editingElementData.attr" id="header_attr"
-                            class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
-                            <option value="p">Paragraph</option>
-                            <option value="h1">H1</option>
-                            <option value="h2">H2</option>
-                            <option value="h3">H3</option>
-                            <option value="h4">H4</option>
-                            <option value="h5">H5</option>
-                            <option value="h6">H6</option>
-                            <option value="blockquote">Blockquote</option>
-                            <option value="address">Address</option>
-                        </select>
-                    </div>
-                @endif
-
-                @if ($editingElementData['type'] === 'number-input')
-                    <div class="mb-4">
-                        <label for="placeholder" class="block text-gray-700 font-semibold mb-2">Placeholder</label>
-                        <input type="text" wire:model.defer="editingElementData.placeholder" id="placeholder"
-                            class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 mb-4">
-                        <div>
-                            <label for="min" class="block text-gray-700 font-semibold mb-2">Min</label>
-                            <input type="number" wire:model.defer="editingElementData.min" id="min"
-                                class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                        <div>
-                            <label for="max" class="block text-gray-700 font-semibold mb-2">Max</label>
-                            <input type="number" wire:model.defer="editingElementData.max" id="max"
-                                class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                    </div>
+                    <x-mzm-html-builder::options.text-block :editingElementData="$editingElementData" />
+                @elseif ($editingElementData['type'] === 'number-input')
+                    <x-mzm-html-builder::options.number-input :editingElementData="$editingElementData" />
+                    <x-mzm-html-builder::options.required :editingElementData="$editingElementData" />
                 @elseif (in_array($editingElementData['type'], ['text-input', 'email', 'textarea-input']))
-                    <div class="mb-4">
-                        <label for="placeholder" class="block text-gray-700 font-semibold mb-2">Placeholder</label>
-                        <input type="text" wire:model.defer="editingElementData.placeholder" id="placeholder"
-                            class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                @endif
-
-                @if (in_array($editingElementData['type'], ['select-input', 'radio-buttons', 'checkbox-buttons']))
-                    <div class="mb-4">
-                        <label for="placeholder" class="block text-gray-700 font-semibold mb-2">Placeholder</label>
-                        <input type="text" wire:model.defer="editingElementData.placeholder" id="placeholder"
-                            class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div class="mb-4 p-4 border border-gray-200 rounded-md">
-                        <label class="block text-gray-700 font-semibold mb-3">Options</label>
-                        @foreach ($editingElementData['options'] as $index => $option)
-                            <div class="flex items-center mb-2"
-                                wire:key="option-{{ $editingElementData['id'] }}-{{ $index }}">
-                                <input type="text"
-                                    wire:model.defer="editingElementData.options.{{ $index }}.value"
-                                    placeholder="Value"
-                                    class="w-full p-2 border border-gray-300 rounded-md mr-2 focus:ring-blue-500 focus:border-blue-500">
-                                <input type="text"
-                                    wire:model.defer="editingElementData.options.{{ $index }}.label"
-                                    placeholder="Label"
-                                    class="w-full p-2 border border-gray-300 rounded-md mr-2 focus:ring-blue-500 focus:border-blue-500">
-                                <button type="button" wire:click="moveOption({{ $index }}, 'up')"
-                                    class="p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-                                    @if ($loop->first) disabled @endif>
-                                    <i class="fa-solid fa-arrow-up fa-sm"></i>
-                                </button>
-                                <button type="button" wire:click="moveOption({{ $index }}, 'down')"
-                                    class="p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-                                    @if ($loop->last) disabled @endif>
-                                    <i class="fa-solid fa-arrow-down fa-sm"></i>
-                                </button>
-                                <button type="button" wire:click="removeOption({{ $index }})"
-                                    class="p-2 text-red-500 hover:text-red-700 rounded-full hover:bg-red-100">
-                                    <i class="fa-solid fa-trash-can fa-sm"></i>
-                                </button>
-                            </div>
-                        @endforeach
-                        <button type="button" wire:click="addOption"
-                            class="text-blue-600 hover:text-blue-800 font-semibold mt-2">
-                            <i class="fa-solid fa-plus-circle mr-1 fa-sm"></i> Add Option
-                        </button>
-                    </div>
-                @endif
-
-                @if ($editingElementData['type'] === 'button')
-                    <div class="mb-4">
-                        <label for="button_type" class="block text-gray-700 font-semibold mb-2">Button
-                            Type</label>
-                        <select wire:model.defer="editingElementData.attributes.type" id="button_type"
-                            class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
-                            <option value="button">button</option>
-                            <option value="submit">submit</option>
-                            <option value="reset">reset</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-4">
-                        <label for="button_color" class="block text-gray-700 font-semibold mb-2">Color
-                            Theme</label>
-                        <select wire:model.defer="editingElementData.attributes.color" id="button_color"
-                            class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
-                            <option value="blue">Blue</option>
-                            <option value="green">Green</option>
-                            <option value="red">Red</option>
-                            <option value="yellow">Yellow</option>
-                            <option value="indigo">Indigo</option>
-                            <option value="purple">Purple</option>
-                            <option value="pink">Pink</option>
-                            <option value="gray">Gray</option>
-                            <option value="black">Black</option>
-                        </select>
-                    </div>
-                @endif
-
-                @if ($editingElementData['type'] !== 'text-block')
-                    <div class="mb-6">
-                        <label class="flex items-center cursor-pointer">
-                            <input type="checkbox" wire:model.defer="editingElementData.required"
-                                class="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
-                            <span class="ml-2 text-gray-700">Required</span>
-                        </label>
-                    </div>
+                    <x-mzm-html-builder::options.input :editingElementData="$editingElementData" />
+                    <x-mzm-html-builder::options.required :editingElementData="$editingElementData" />
+                @elseif(in_array($editingElementData['type'], ['select-input', 'radio-buttons', 'checkbox-buttons']))
+                    <x-mzm-html-builder::options.input-options :editingElementData="$editingElementData" />
+                    <x-mzm-html-builder::options.required :editingElementData="$editingElementData" />
+                @elseif ($editingElementData['type'] === 'button')
+                    <x-mzm-html-builder::options.button />
                 @endif
 
             </form>

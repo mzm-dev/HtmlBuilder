@@ -20,7 +20,7 @@
         aria-hidden="true" x-on:click="showSidebar = false" x-transition.opacity=""></div>
 
     <nav x-cloak
-        class="fixed left-0 z-20 flex h-svh w-60 shrink-0 flex-col border-r border-neutral-300 bg-neutral-50 p-4 transition-transform duration-300 md:w-64 md:translate-x-0 md:relative dark:border-neutral-700 dark:bg-neutral-900"
+        class="fixed left-0 z-20 flex h-svh w-40 shrink-0 flex-col border-r border-neutral-300 bg-neutral-50 p-4 transition-transform duration-300 md:w-64 md:translate-x-0 md:relative dark:border-neutral-700 dark:bg-neutral-900"
         x-bind:class="showSidebar ? 'translate-x-0' : '-translate-x-60'" aria-label="sidebar navigation">
         <!-- logo  -->
         <a href="#" class="ml-2 mb-4 w-fit text-2xl font-bold text-neutral-900 dark:text-white">

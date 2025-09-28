@@ -1,5 +1,5 @@
 <div x-data="formbuilder" x-on:show-edit-modal.window="showModal = true" x-on:hide-edit-modal.window="showModal = false"
-    class="relative flex w-full flex-col md:flex-row">
+    class="relative flex w-full flex-col md:flex-row" x-init="showPreviewModal = false">
 
     <nav x-cloak
         class="fixed left-0 z-20 flex h-svh w-60 shrink-0 flex-col border-r border-neutral-300 bg-neutral-50 p-4 transition-transform duration-300 md:w-64 md:translate-x-0 md:relative dark:border-neutral-700 dark:bg-neutral-900"
@@ -88,16 +88,23 @@
     </nav>
 
     <!-- main content  -->
-    <div id="main-content" class="h-svh w-full overflow-y-auto bg-white dark:bg-neutral-950">
+    <div class="h-svh w-full overflow-y-auto bg-white dark:bg-neutral-950">
         <!-- Add main content here  -->
         <div class="mx-auto p-4">
             <div class="flex justify-between items-center mb-6">
                 <h1 class="text-3xl font-bold text-gray-800">Form Builder</h1>
-                <button type="button" wire:click="saveForm"
-                    class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-700">
-                    <i class="fa-solid fa-save fa-sm"></i>
-                    <span>Save Form</span>
-                </button>
+                <div class="flex items-center space-x-4">
+                    <button type="button" x-on:click="showPreviewModal = true"
+                        class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700">
+                        <i class="fa-solid fa-eye fa-sm"></i>
+                        <span>Preview</span>
+                    </button>
+                    <button type="button" wire:click="saveForm"
+                        class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-700">
+                        <i class="fa-solid fa-save fa-sm"></i>
+                        <span>Save Form</span>
+                    </button>
+                </div>
             </div>
             <div class="bg-white p-8 rounded-xl shadow-lg mb-6">
                 <div class="">
@@ -152,27 +159,27 @@
                             </div>
                             <div class="flex-grow">
                                 @if ($element['type'] === 'text-input')
-                                    <x-mzm-html-builder::text-input :element="$element" />
+                                    <x-mzm-html-builder::elements.text-input :element="$element" />
                                 @elseif($element['type'] === 'email')
-                                    <x-mzm-html-builder::email :element="$element" />
+                                    <x-mzm-html-builder::elements.email :element="$element" />
                                 @elseif($element['type'] === 'textarea-input')
-                                    <x-mzm-html-builder::textarea :element="$element" />
+                                    <x-mzm-html-builder::elements.textarea :element="$element" />
                                 @elseif($element['type'] === 'select-input')
-                                    <x-mzm-html-builder::select :element="$element" />
+                                    <x-mzm-html-builder::elements.select :element="$element" />
                                 @elseif($element['type'] === 'radio-buttons')
-                                    <x-mzm-html-builder::radio :element="$element" />
+                                    <x-mzm-html-builder::elements.radio :element="$element" />
                                 @elseif($element['type'] === 'checkbox-buttons')
-                                    <x-mzm-html-builder::checkbox :element="$element" />
+                                    <x-mzm-html-builder::elements.checkbox :element="$element" />
                                 @elseif($element['type'] === 'number-input')
-                                    <x-mzm-html-builder::number-input :element="$element" />
+                                    <x-mzm-html-builder::elements.number-input :element="$element" />
                                 @elseif($element['type'] === 'date')
-                                    <x-mzm-html-builder::date :element="$element" />
+                                    <x-mzm-html-builder::elements.date :element="$element" />
                                 @elseif($element['type'] === 'number-input')
-                                    <x-mzm-html-builder::number-input :element="$element" />
+                                    <x-mzm-html-builder::elements.number-input :element="$element" />
                                 @elseif($element['type'] === 'button')
-                                    <x-mzm-html-builder::button :element="$element" />
+                                    <x-mzm-html-builder::elements.button :element="$element" />
                                 @elseif($element['type'] === 'text-block')
-                                    <x-mzm-html-builder::text-block :element="$element" />
+                                    <x-mzm-html-builder::elements.text-block :element="$element" />
                                 @endif
                             </div>
 
@@ -184,14 +191,13 @@
     </div>
 
     <x-mzm-html-builder::edit-element-modal :editing-element-data="$editingElementData" />
+    <x-mzm-html-builder::form-preview-modal :form-title="$formTitle" :form-elements="$formElements" />
 </div>
-
-
-
 @script
     <script>
         Alpine.data('formbuilder', () => ({
             showModal: false,
+            showPreviewModal: false,
             init() {
                 //savedForm
                 $wire.on('createdForm', (event) => {

@@ -186,9 +186,9 @@ class FormBuilder extends Component
 
     private function generateButtonClasses(string $color): string
     {
-        $baseClasses = 'whitespace-nowrap rounded-sm px-4 py-2 text-sm font-medium tracking-wide text-white transition hover:opacity-75 text-center focus-visible:outline-2 focus-visible:outline-offset-2 active:opacity-100 active:outline-offset-0 disabled:opacity-75 disabled:cursor-not-allowed dark:text-white';
+        $baseClasses = '';
 
-        $colorClasses = "bg-{$color}-500 border border-{$color}-500 focus-visible:outline-{$color}-500 dark:bg-{$color}-500 dark:border-{$color}-500 dark:focus-visible:outline-{$color}-500";
+        $colorClasses = "text-white bg-{$color}-700 hover:bg-{$color}-800 focus:ring-4 focus:ring-{$color}-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-{$color}-600 dark:hover:bg-{$color}-700 focus:outline-none dark:focus:ring-{$color}-800";
 
         return "{$baseClasses} {$colorClasses}";
     }

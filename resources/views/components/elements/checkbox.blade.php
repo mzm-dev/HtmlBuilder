@@ -1,5 +1,5 @@
 <div class="flex flex-col gap-2">
-    <x-mzm-html-builder::label :element="$element" />
+    <x-mzm-html-builder::elements.label :element="$element" />
     @foreach ($element['options'] as $key => $option)
         <label for="chk-{{ $element['id'] }}-{{ $key }}"
             class="flex items-center gap-2 text-sm font-medium text-neutral-600 dark:text-neutral-300 has-checked:text-neutral-900 dark:has-checked:text-white has-disabled:cursor-not-allowed has-disabled:opacity-75">

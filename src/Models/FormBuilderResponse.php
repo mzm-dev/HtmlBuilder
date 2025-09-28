@@ -5,20 +5,18 @@ namespace Mzm\HtmlBuilder\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Laravel\Prompts\FormBuilder;
 
-class FormBuilderForm extends Model
+class FormBuilderResponse extends Model
 {
-    use HasFactory, HasUuids, SoftDeletes;
+    use HasFactory, HasUuids;
 
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'form_builder_forms';
+    protected $table = 'form_builder_responses';
 
     /**
      * The attributes that are mass assignable.
@@ -26,8 +24,8 @@ class FormBuilderForm extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'title',
-        'elements',
+        'form_id',
+        'data',
     ];
 
     /**
@@ -38,14 +36,4 @@ class FormBuilderForm extends Model
     protected $casts = [
         'elements' => 'array',
     ];
-
-    /**
-     * Get all of the response for the FormBuilderForm
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function response(): HasMany
-    {
-        return $this->hasMany(FormBuilderResponse::class, 'form_id', 'id');
-    }
 }
