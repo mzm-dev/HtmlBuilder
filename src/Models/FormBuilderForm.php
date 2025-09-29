@@ -27,6 +27,7 @@ class FormBuilderForm extends Model
      */
     protected $fillable = [
         'title',
+        'descriptions',
         'elements',
     ];
 

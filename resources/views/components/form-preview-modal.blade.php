@@ -1,4 +1,4 @@
-@props(['formTitle', 'formElements'])
+@props(['formTitle', 'formDescriptions', 'formElements'])
 
 <div x-show="showPreviewModal" x-cloak x-transition:enter="transition ease-out duration-300"
     x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
@@ -9,7 +9,12 @@
         @click.away="showPreviewModal = false">
         {{-- Modal Header --}}
         <div class="px-8 py-4 border-b flex justify-between items-center">
-            <h2 class="text-2xl font-bold text-gray-800">{{ $formTitle ?? 'Tidada Title' }}</h2>
+            <div class="grid grid-cols-1 gap-0">
+                <h2 class="font-semibold tracking-wide text-onSurfaceStrong dark:text-onSurfaceDarkStrong">
+                    {{ $formTitle ?? 'Tiada Title' }}</h2>
+                <p>
+                    {{ $formDescriptions ?? 'Tiada Description' }}</p>
+            </div>
             <button x-on:click="showPreviewModal = false" aria-label="close modal"
                 class="p-2 rounded-full hover:bg-gray-200">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor"
@@ -30,9 +35,12 @@
                 </div>
             @else
                 <form>
-                    <div class="grid grid-cols-3 gap-4">
+                    <div class="grid grid-cols-4 gap-2">
                         @foreach ($formElements as $element)
-                            <div class="col-span-3 mb-1 rounded-lg">
+                            @php
+                                $colspan = $element['colspan'] ?? 4;
+                            @endphp
+                            <div class="mb-1 rounded-lg col-span-{{ $colspan }}">
                                 @if ($element['type'] === 'text-input')
                                     <x-mzm-html-builder::elements.text-input :element="$element" />
                                 @elseif($element['type'] === 'email')

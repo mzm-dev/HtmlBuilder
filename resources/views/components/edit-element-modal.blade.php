@@ -39,6 +39,7 @@
                 @elseif ($editingElementData['type'] === 'button')
                     <x-mzm-html-builder::options.button />
                 @endif
+                <x-mzm-html-builder::options.width :editingElementData="$editingElementData" />
 
             </form>
             <div

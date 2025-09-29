@@ -31,10 +31,9 @@
 
                                     <td class="p-4 text-center">{{ count($form->elements) }}</td>
                                     <td class="p-4 flex items-center justify-center">
-                                        <button type="button"
-                                            class="bg-purple-500 hover:bg-purple-700 text-white font-bold pb-1 px-4 rounded-full flex items-center justify-center h-8 w-8 cursor-pointer">
+                                        <a href="{{ count($form->response) ? route('form-builder.response', $form->id) : 'javascript:void(0);' }} " class="whitespace-nowrap rounded-sm bg-transparent p-0.5 font-semibold {{ count($form->response) ? 'text-purple-600 outline-purple-600 dark:text-purple-400 dark:outline-purple-400' : 'text-gray-400 outline-gray-400 dark:text-gray-600 dark:outline-gray-600' }} hover:opacity-75 focus-visible:outline-2 focus-visible:outline-offset-2 active:opacity-100 active:outline-offset-0">
                                             <span>{{ count($form->response) }}</span>
-                                        </button>
+                                        </a>
                                     </td>
                                     <td class="p-4">{{ $form->created_at->format('Y-m-d H:i') }}</td>
                                     <td class="p-4 space-x-2 whitespace-nowrap">

@@ -10,7 +10,7 @@
 
             <a href="#"
                 class="flex items-center gap-2 mt-2 px-2 py-1.5 text-sm rounded-sm font-medium text-neutral-600 underline-offset-2 hover:bg-black/5 hover:text-neutral-900 focus-visible:underline focus:outline-hidden dark:text-neutral-300 dark:hover:bg-white/5 dark:hover:text-white">
-                <span>Form Elements</span>
+                <span>Block Elements</span>
             </a>
             <ul>
                 <li class="py-0.5 border-neutral-300 dark:border-neutral-700">
@@ -20,6 +20,20 @@
                         <span>Text Block</span>
                     </button>
                 </li>
+                <li class="py-0.5 border-neutral-300 dark:border-neutral-700">
+                    <button type="button" wire:click="addElement('separator')"
+                        class="cursor-pointer flex items-center w-full gap-2 px-2 py-1.5 text-sm rounded-sm text-neutral-600 underline-offset-2 hover:bg-black/5 hover:text-neutral-900 focus-visible:underline focus:outline-hidden dark:text-neutral-300 dark:hover:bg-white/5 dark:hover:text-white">
+                        <i class="fa-solid fa-ellipsis w-6 text-center text-gray-500 fa-sm"></i>
+                        <span>Separator</span>
+                    </button>
+                </li>
+            </ul>
+            <a href="#"
+                class="flex items-center gap-2 mt-2 px-2 py-1.5 text-sm rounded-sm font-medium text-neutral-600 underline-offset-2 hover:bg-black/5 hover:text-neutral-900 focus-visible:underline focus:outline-hidden dark:text-neutral-300 dark:hover:bg-white/5 dark:hover:text-white">
+                <span>Form Elements</span>
+            </a>
+            <ul>
+
                 <li class="py-0.5 border-neutral-300 dark:border-neutral-700">
                     <button type="button" wire:click="addElement('text-input')"
                         class="cursor-pointer flex items-center w-full gap-2 px-2 py-1.5 text-sm rounded-sm text-neutral-600 underline-offset-2 hover:bg-black/5 hover:text-neutral-900 focus-visible:underline focus:outline-hidden dark:text-neutral-300 dark:hover:bg-white/5 dark:hover:text-white">
@@ -107,11 +121,20 @@
                 </div>
             </div>
             <div class="bg-white p-8 rounded-xl shadow-lg mb-6">
-                <div class="">
+                <div class="mb-3">
                     <label for="formTitle" class="block text-gray-700 font-semibold mb-2">Form Name</label>
                     <input type="text" wire:model.defer="formTitle" id="formTitle"
                         class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                     @error('formTitle')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
+                </div>
+                <div class="mb-3">
+                    <label for="formDescriptions" class="block text-gray-700 font-semibold mb-2">Form
+                        Descriptions</label>
+                    <textarea wire:model.defer="formDescriptions" id="formDescriptions"
+                        class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"></textarea>
+                    @error('formDescriptions')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
                 </div>
@@ -126,72 +149,80 @@
                         <p class="mt-2">Click on an element from the left panel to add it to your form.</p>
                     </div>
                 @else
-                    @foreach ($formElements as $element)
-                        <div
-                            class="mb-1 border border-gray-300 p-4 rounded-lg hover:border-blue-500 hover:shadow-md transition-all duration-200 relative group items-start">
-                            <!-- Clickable Area for Editing -->
-                            <div class="flex flex-row ms-3 mb-1 float-right space-x-1">
-                                <!-- Up Handle -->
-                                <x-mzm-html-builder::action-button
-                                    wire:click.stop="moveElement('{{ $element['id'] }}', 'up')" :disabled="$loop->first">
-                                    <i class="fa-solid fa-arrow-up fa-sm"></i>
-                                </x-mzm-html-builder::action-button>
-                                <!-- Down Handle -->
-                                <x-mzm-html-builder::action-button
-                                    wire:click.stop="moveElement('{{ $element['id'] }}', 'down')" :disabled="$loop->last">
-                                    <i class="fa-solid fa-arrow-down fa-sm"></i>
-                                </x-mzm-html-builder::action-button>
-                                <!-- Edit Handle -->
-                                <x-mzm-html-builder::action-button color="yellow"
-                                    wire:click.stop="editElement('{{ $element['id'] }}')">
-                                    <i class="fa-solid fa-pencil fa-sm"></i>
-                                </x-mzm-html-builder::action-button>
-                                <!-- Duplicate Handle -->
-                                <x-mzm-html-builder::action-button color="blue"
-                                    wire:click.stop="duplicateElement('{{ $element['id'] }}')">
-                                    <i class="fa-regular fa-copy fa-sm"></i>
-                                </x-mzm-html-builder::action-button>
-                                <!-- Trash Handle -->
-                                <x-mzm-html-builder::action-button color="red"
-                                    x-on:click.stop="confirmDelete('{{ $element['id'] }}')">
-                                    <i class="fa-solid fa-trash-can fa-sm"></i>
-                                </x-mzm-html-builder::action-button>
+                    <div class="grid grid-cols-4 gap-4">
+                        @foreach ($formElements as $element)
+                            @php
+                                $colspan = $element['colspan'] ?? 3;
+                            @endphp
+                            <div
+                                class="mb-1 border border-gray-300 p-4 rounded-lg hover:border-blue-500 hover:shadow-md transition-all duration-200 relative group items-start col-span-{{ $colspan }}">
+                                <!-- Clickable Area for Editing -->
+                                <div
+                                    class="flex flex-row ms-3 mb-1 sm:float-none space-x-1 {{ $colspan == 1 ? 'md:float-none' : 'md:float-right' }}">
+                                    <!-- Up Handle -->
+                                    <x-mzm-html-builder::action-button
+                                        wire:click.stop="moveElement('{{ $element['id'] }}', 'up')" :disabled="$loop->first">
+                                        <i class="fa-solid fa-arrow-up fa-sm"></i>
+                                    </x-mzm-html-builder::action-button>
+                                    <!-- Down Handle -->
+                                    <x-mzm-html-builder::action-button
+                                        wire:click.stop="moveElement('{{ $element['id'] }}', 'down')"
+                                        :disabled="$loop->last">
+                                        <i class="fa-solid fa-arrow-down fa-sm"></i>
+                                    </x-mzm-html-builder::action-button>
+                                    <!-- Edit Handle -->
+                                    @if ($element['type'] != 'separator')
+                                        <x-mzm-html-builder::action-button color="yellow"
+                                            wire:click.stop="editElement('{{ $element['id'] }}')">
+                                            <i class="fa-solid fa-pencil fa-sm"></i>
+                                        </x-mzm-html-builder::action-button>
+                                    @endif
+                                    <!-- Duplicate Handle -->
+                                    <x-mzm-html-builder::action-button color="blue"
+                                        wire:click.stop="duplicateElement('{{ $element['id'] }}')">
+                                        <i class="fa-regular fa-copy fa-sm"></i>
+                                    </x-mzm-html-builder::action-button>
+                                    <!-- Trash Handle -->
+                                    <x-mzm-html-builder::action-button color="red"
+                                        x-on:click.stop="confirmDelete('{{ $element['id'] }}')">
+                                        <i class="fa-solid fa-trash-can fa-sm"></i>
+                                    </x-mzm-html-builder::action-button>
+                                </div>
+                                <div class="flex-grow">
+                                    @if ($element['type'] === 'text-input')
+                                        <x-mzm-html-builder::elements.text-input :element="$element" />
+                                    @elseif($element['type'] === 'email')
+                                        <x-mzm-html-builder::elements.email :element="$element" />
+                                    @elseif($element['type'] === 'textarea-input')
+                                        <x-mzm-html-builder::elements.textarea :element="$element" />
+                                    @elseif($element['type'] === 'select-input')
+                                        <x-mzm-html-builder::elements.select :element="$element" />
+                                    @elseif($element['type'] === 'radio-buttons')
+                                        <x-mzm-html-builder::elements.radio :element="$element" />
+                                    @elseif($element['type'] === 'checkbox-buttons')
+                                        <x-mzm-html-builder::elements.checkbox :element="$element" />
+                                    @elseif($element['type'] === 'number-input')
+                                        <x-mzm-html-builder::elements.number-input :element="$element" />
+                                    @elseif($element['type'] === 'date')
+                                        <x-mzm-html-builder::elements.date :element="$element" />
+                                    @elseif($element['type'] === 'button')
+                                        <x-mzm-html-builder::elements.button :element="$element" />
+                                    @elseif($element['type'] === 'text-block')
+                                        <x-mzm-html-builder::elements.text-block :element="$element" />
+                                    @elseif($element['type'] === 'separator')
+                                        <x-mzm-html-builder::elements.separator :element="$element" />
+                                    @endif
+                                </div>
                             </div>
-                            <div class="flex-grow">
-                                @if ($element['type'] === 'text-input')
-                                    <x-mzm-html-builder::elements.text-input :element="$element" />
-                                @elseif($element['type'] === 'email')
-                                    <x-mzm-html-builder::elements.email :element="$element" />
-                                @elseif($element['type'] === 'textarea-input')
-                                    <x-mzm-html-builder::elements.textarea :element="$element" />
-                                @elseif($element['type'] === 'select-input')
-                                    <x-mzm-html-builder::elements.select :element="$element" />
-                                @elseif($element['type'] === 'radio-buttons')
-                                    <x-mzm-html-builder::elements.radio :element="$element" />
-                                @elseif($element['type'] === 'checkbox-buttons')
-                                    <x-mzm-html-builder::elements.checkbox :element="$element" />
-                                @elseif($element['type'] === 'number-input')
-                                    <x-mzm-html-builder::elements.number-input :element="$element" />
-                                @elseif($element['type'] === 'date')
-                                    <x-mzm-html-builder::elements.date :element="$element" />
-                                @elseif($element['type'] === 'number-input')
-                                    <x-mzm-html-builder::elements.number-input :element="$element" />
-                                @elseif($element['type'] === 'button')
-                                    <x-mzm-html-builder::elements.button :element="$element" />
-                                @elseif($element['type'] === 'text-block')
-                                    <x-mzm-html-builder::elements.text-block :element="$element" />
-                                @endif
-                            </div>
-
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
                 @endif
             </div>
         </div>
     </div>
 
     <x-mzm-html-builder::edit-element-modal :editing-element-data="$editingElementData" />
-    <x-mzm-html-builder::form-preview-modal :form-title="$formTitle" :form-elements="$formElements" />
+    <x-mzm-html-builder::form-preview-modal :form-title="$formTitle" :form-descriptions="$formDescriptions" :form-elements="$formElements" />
 </div>
 @script
     <script>

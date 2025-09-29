@@ -35,13 +35,6 @@
                 <span>Builder</span>
             </a>
         </li>
-
-        <li class="border-l px-2 py-0.5 border-neutral-300 dark:border-neutral-700">
-            <a href="#"
-                class="flex items-center gap-2 px-2 py-1.5 text-sm rounded-sm text-neutral-600 underline-offset-2 hover:bg-black/5 hover:text-neutral-900 focus-visible:underline focus:outline-hidden dark:text-neutral-300 dark:hover:bg-white/5 dark:hover:text-white">
-                <span>Responses</span>
-            </a>
-        </li>
     </ul>
 
 </div>

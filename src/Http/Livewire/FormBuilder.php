@@ -12,6 +12,7 @@ class FormBuilder extends Component
     public $editingElementData = [];
     public $formId;
     public $formTitle = 'My New Form';
+    public $formDescriptions = 'My New Form Descriptions';
 
     public function mount($formId = null, $initialData = [])
     {
@@ -19,6 +20,7 @@ class FormBuilder extends Component
             $form = FormBuilderForm::findOrFail($formId);
             $this->formId = $form->id;
             $this->formTitle = $form->title;
+            $this->formDescriptions = $form->descriptions;
             $this->formElements = $form->elements;
         } else {
             $this->formElements = $initialData;
@@ -32,6 +34,7 @@ class FormBuilder extends Component
             'type' => $type,
             'label' => 'New ' . ucfirst($type),
             'placeholder' => '',
+            'colspan' => '4',
             'attr' => $type === 'text-block' ? 'p' : null,
             'options' => $options ? [
                 ['value' => 'value1', 'label' => 'Option 1'],
@@ -158,11 +161,13 @@ class FormBuilder extends Component
     {
         $this->validate([
             'formTitle' => 'required|string|max:255',
+            'formDescriptions' => 'nullable|string',
             'formElements' => 'present|array'
         ]);
 
         $formData = [
             'title' => $this->formTitle,
+            'descriptions' => $this->formDescriptions,
             'elements' => $this->formElements,
         ];
 
