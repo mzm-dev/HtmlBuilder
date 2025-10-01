@@ -1,5 +1,3 @@
-@props(['editingElementData'])
-
 <div x-show="showModal" x-cloak x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
     x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-100"
     x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
@@ -24,31 +22,14 @@
 
             <form wire:submit.prevent="saveElement" class="flex-grow overflow-y-auto px-8 py-4">
                 {{-- Common fields --}}
-                <x-mzm-html-builder::options.label />
-                @if ($editingElementData['type'] === 'text-block')
-                    <x-mzm-html-builder::options.text-block :editingElementData="$editingElementData" />
-                @elseif ($editingElementData['type'] === 'number-input')
-                    <x-mzm-html-builder::options.number-input :editingElementData="$editingElementData" />
-                    <x-mzm-html-builder::options.required :editingElementData="$editingElementData" />
-                @elseif (in_array($editingElementData['type'], ['text-input', 'email', 'textarea-input']))
-                    <x-mzm-html-builder::options.input :editingElementData="$editingElementData" />
-                    <x-mzm-html-builder::options.required :editingElementData="$editingElementData" />
-                @elseif(in_array($editingElementData['type'], ['select-input', 'radio-buttons', 'checkbox-buttons']))
-                    <x-mzm-html-builder::options.input-options :editingElementData="$editingElementData" />
-                    <x-mzm-html-builder::options.required :editingElementData="$editingElementData" />
-                @elseif ($editingElementData['type'] === 'button')
-                    <x-mzm-html-builder::options.button />
-                @endif
-                <x-mzm-html-builder::options.width :editingElementData="$editingElementData" />
-
+                <x-mzm-html-builder::options.fields :editingElementData="$editingElementData" :formElements="$formElements" />
             </form>
             <div
-                class="flex flex-col-reverse justify-between gap-2 border-t border-neutral-300 bg-neutral-50/60 p-4 dark:border-neutral-700 dark:bg-neutral-950/20 sm:flex-row sm:items-center md:justify-end">
-
+                class="flex flex-col-reverse justify-between gap-2 border-t border-neutral-300 bg-neutral-50/60 p-4 sm:flex-row sm:items-center md:justify-end">
                 <button x-on:click="showModal = false" type="button"
-                    class="whitespace-nowrap rounded-sm px-4 py-2 text-center text-sm font-medium tracking-wide text-neutral-600 transition hover:opacity-75 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black active:opacity-100 active:outline-offset-0 dark:text-neutral-300 dark:focus-visible:outline-white">Cancel</button>
+                    class="whitespace-nowrap rounded-sm px-4 py-2 text-center text-sm font-medium tracking-wide text-neutral-600 transition hover:opacity-75 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black active:opacity-100 active:outline-offset-0 ">Cancel</button>
                 <button type="submit" form="edit-element-form" wire:click="saveElement"
-                    class="whitespace-nowrap rounded-sm bg-black border border-black dark:border-white px-4 py-2 text-center text-sm font-medium tracking-wide text-neutral-100 transition hover:opacity-75 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black active:opacity-100 active:outline-offset-0 dark:bg-white dark:text-black dark:focus-visible:outline-white">Save
+                    class="whitespace-nowrap rounded-sm bg-black border border-black px-4 py-2 text-center text-sm font-medium tracking-wide text-neutral-100 transition hover:opacity-75 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black active:opacity-100 active:outline-offset-0">Save
                     Changes</button>
             </div>
         @endif

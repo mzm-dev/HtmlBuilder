@@ -3,7 +3,8 @@
 ])
 
 @php
-    $baseClasses = 'flex items-center justify-center aspect-square whitespace-nowrap p-2 rounded-full disabled:opacity-50 disabled:cursor-not-allowed';
+    $baseClasses =
+        'flex items-center justify-center aspect-square whitespace-nowrap p-2 rounded-full disabled:opacity-50 disabled:cursor-not-allowed';
 
     $colorClasses = "text-{$color}-500 hover:text-{$color}-700 hover:bg-{$color}-100";
 @endphp

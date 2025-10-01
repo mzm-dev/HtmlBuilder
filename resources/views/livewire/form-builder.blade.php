@@ -189,29 +189,46 @@
                                     </x-mzm-html-builder::action-button>
                                 </div>
                                 <div class="flex-grow">
-                                    @if ($element['type'] === 'text-input')
-                                        <x-mzm-html-builder::elements.text-input :element="$element" />
-                                    @elseif($element['type'] === 'email')
-                                        <x-mzm-html-builder::elements.email :element="$element" />
-                                    @elseif($element['type'] === 'textarea-input')
-                                        <x-mzm-html-builder::elements.textarea :element="$element" />
-                                    @elseif($element['type'] === 'select-input')
-                                        <x-mzm-html-builder::elements.select :element="$element" />
-                                    @elseif($element['type'] === 'radio-buttons')
-                                        <x-mzm-html-builder::elements.radio :element="$element" />
-                                    @elseif($element['type'] === 'checkbox-buttons')
-                                        <x-mzm-html-builder::elements.checkbox :element="$element" />
-                                    @elseif($element['type'] === 'number-input')
-                                        <x-mzm-html-builder::elements.number-input :element="$element" />
-                                    @elseif($element['type'] === 'date')
-                                        <x-mzm-html-builder::elements.date :element="$element" />
-                                    @elseif($element['type'] === 'button')
-                                        <x-mzm-html-builder::elements.button :element="$element" />
-                                    @elseif($element['type'] === 'text-block')
-                                        <x-mzm-html-builder::elements.text-block :element="$element" />
-                                    @elseif($element['type'] === 'separator')
-                                        <x-mzm-html-builder::elements.separator :element="$element" />
-                                    @endif
+                                    @switch($element['type'])
+                                        @case('text-input')
+                                        @case('email')
+
+                                        @case('number-input')
+                                        @case('date')
+
+                                        @case('textarea-input')
+                                        @case('select-input')
+
+                                        @case('radio-buttons')
+                                        @case('checkbox-buttons')
+                                            @if ($element['id'])
+                                                <div wire:key="preview-{{ $element['id'] }}">
+                                                    @include(
+                                                        'mzm-html-builder::livewire.preview.input-wrapper',
+                                                        [
+                                                            'element' => $element,
+                                                            'name' => $element['id'],
+                                                        ]
+                                                    )
+                                                </div>
+                                            @else
+                                                {{-- Render elemen tanpa binding jika tidak ada 'name' --}}
+                                                @include(
+                                                    'mzm-html-builder::livewire.preview.static-element',
+                                                    [
+                                                        'element' => $element,
+                                                    ]
+                                                )
+                                                @include('mzm-html-builder::livewire.preview.static-element', ['element' => $element])
+                                            @endif
+                                        @break
+
+                                        @default
+                                            {{-- Untuk elemen yang tidak butuh input seperti button, text-block --}}
+                                            @include('mzm-html-builder::livewire.preview.static-element', [
+                                                'element' => $element,
+                                            ])
+                                    @endswitch
                                 </div>
                             </div>
                         @endforeach
@@ -221,7 +238,7 @@
         </div>
     </div>
 
-    <x-mzm-html-builder::edit-element-modal :editing-element-data="$editingElementData" />
+    <x-mzm-html-builder::edit-element-modal :editing-element-data="$editingElementData" :form-elements="$formElements" />
     <x-mzm-html-builder::form-preview-modal :form-title="$formTitle" :form-descriptions="$formDescriptions" :form-elements="$formElements" />
 </div>
 @script

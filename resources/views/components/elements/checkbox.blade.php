@@ -18,3 +18,4 @@
     @endforeach
 
 </div>
+<x-mzm-html-builder::elements.help-text :element="$element" />

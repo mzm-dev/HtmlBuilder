@@ -3,6 +3,7 @@
 <div x-show="showPreviewModal" x-cloak x-transition:enter="transition ease-out duration-300"
     x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
     x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100"
+    x-on:validation-success.window="Swal.fire('Success', event.detail.message, 'success')"
     x-transition:leave-end="opacity-0" class="fixed inset-0 bg-gray-600 flex items-center justify-center z-50"
     x-on:keydown.escape.window="showPreviewModal = false" style="background-color: rgba(0,0,0,0.5);">
     <div class="bg-white rounded-lg shadow-2xl w-full max-w-3xl flex flex-col max-h-[90vh]"
@@ -15,7 +16,7 @@
                 <p>
                     {{ $formDescriptions ?? 'Tiada Description' }}</p>
             </div>
-            <button x-on:click="showPreviewModal = false" aria-label="close modal"
+            <button x-on:click="showPreviewModal = false; $wire.resetPreviewValidation()" aria-label="close modal"
                 class="p-2 rounded-full hover:bg-gray-200">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor"
                     fill="none" stroke-width="1.4" class="w-5 h-5">
@@ -34,34 +35,50 @@
                     <p class="mt-2">Add some elements to see a preview.</p>
                 </div>
             @else
-                <form>
+                <form wire:submit.prevent="validatePreview" id="preview-form">
                     <div class="grid grid-cols-4 gap-2">
                         @foreach ($formElements as $element)
                             @php
                                 $colspan = $element['colspan'] ?? 4;
+                                $name = $element['id'] ?? null;
                             @endphp
                             <div class="mb-1 rounded-lg col-span-{{ $colspan }}">
-                                @if ($element['type'] === 'text-input')
-                                    <x-mzm-html-builder::elements.text-input :element="$element" />
-                                @elseif($element['type'] === 'email')
-                                    <x-mzm-html-builder::elements.email :element="$element" />
-                                @elseif($element['type'] === 'textarea-input')
-                                    <x-mzm-html-builder::elements.textarea :element="$element" />
-                                @elseif($element['type'] === 'select-input')
-                                    <x-mzm-html-builder::elements.select :element="$element" />
-                                @elseif($element['type'] === 'radio-buttons')
-                                    <x-mzm-html-builder::elements.radio :element="$element" />
-                                @elseif($element['type'] === 'checkbox-buttons')
-                                    <x-mzm-html-builder::elements.checkbox :element="$element" />
-                                @elseif($element['type'] === 'number-input')
-                                    <x-mzm-html-builder::elements.number-input :element="$element" />
-                                @elseif($element['type'] === 'date')
-                                    <x-mzm-html-builder::elements.date :element="$element" />
-                                @elseif($element['type'] === 'button')
-                                    <x-mzm-html-builder::elements.button :element="$element" />
-                                @elseif($element['type'] === 'text-block')
-                                    <x-mzm-html-builder::elements.text-block :element="$element" />
-                                @endif
+                                @switch($element['type'])
+                                    @case('text-input')
+                                    @case('email')
+
+                                    @case('number-input')
+                                    @case('date')
+
+                                    @case('textarea-input')
+                                    @case('select-input')
+
+                                    @case('radio-buttons')
+                                    @case('checkbox-buttons')
+                                        @if ($name)
+                                            <div wire:key="preview-{{ $element['id'] }}">
+                                                @include(
+                                                    'mzm-html-builder::livewire.preview.input-wrapper',
+                                                    [
+                                                        'element' => $element,
+                                                        'name' => $name,
+                                                    ]
+                                                )
+                                            </div>
+                                        @else
+                                            {{-- Render elemen tanpa binding jika tidak ada 'name' --}}
+                                            @include('mzm-html-builder::livewire.preview.static-element', [
+                                                'element' => $element,
+                                            ])
+                                        @endif
+                                    @break
+
+                                    @default
+                                        {{-- Untuk elemen yang tidak butuh input seperti button, text-block --}}
+                                        @include('mzm-html-builder::livewire.preview.static-element', [
+                                            'element' => $element,
+                                        ])
+                                @endswitch
                             </div>
                         @endforeach
                     </div>
@@ -70,9 +87,16 @@
         </div>
 
         {{-- Modal Footer --}}
-        <div class="flex justify-end space-x-4 px-8 py-4 border-t">
-            <button type="button" x-on:click="showPreviewModal = false"
+        <div class="flex justify-between items-center px-8 py-4 border-t">
+            <button type="button" x-on:click="showPreviewModal = false; $wire.resetPreviewValidation();$set('previewData', [])"
                 class="px-6 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 font-semibold">Close</button>
+            <div class="flex space-x-4">
+                <button type="button" wire:click="$set('previewData', [])"
+                    class="px-6 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 font-semibold">Reset
+                    Form</button>
+                <button type="submit" form="preview-form"
+                    class="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 font-semibold">Validate</button>
+            </div>
         </div>
     </div>
 </div>

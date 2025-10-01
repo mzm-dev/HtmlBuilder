@@ -4,6 +4,7 @@ namespace Mzm\HtmlBuilder\Http\Livewire;
 
 use Livewire\Component;
 use Mzm\HtmlBuilder\Models\FormBuilderForm;
+use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 
 class FormBuilder extends Component
@@ -13,6 +14,8 @@ class FormBuilder extends Component
     public $formId;
     public $formTitle = 'My New Form';
     public $formDescriptions = 'My New Form Descriptions';
+    public $previewData = [];
+    public $presence = 'optional'; // Properti baru untuk radio button
 
     public function mount($formId = null, $initialData = [])
     {
@@ -22,6 +25,20 @@ class FormBuilder extends Component
             $this->formTitle = $form->title;
             $this->formDescriptions = $form->descriptions;
             $this->formElements = $form->elements;
+            foreach ($this->formElements as $element) { // Assign dynamic variable on previewData
+                switch ($element['type']) {
+                    case 'text-input':
+                    case 'email':
+                    case 'number-input':
+                    case 'date':
+                    case 'textarea-input':
+                    case 'select-input':
+                    case 'radio-buttons':
+                    case 'checkbox-buttons':
+                        $this->previewData[$element['id']] = null;
+                        break;
+                }
+            }
         } else {
             $this->formElements = $initialData;
         }
@@ -30,10 +47,11 @@ class FormBuilder extends Component
     public function addElement($type, $options = null)
     {
         $newElement = [
-            'id' => uniqid(),
+            'id' => uniqid('element-'),
             'type' => $type,
             'label' => 'New ' . ucfirst($type),
             'placeholder' => '',
+            'helpText' => '',
             'colspan' => '4',
             'attr' => $type === 'text-block' ? 'p' : null,
             'options' => $options ? [
@@ -53,6 +71,15 @@ class FormBuilder extends Component
     public function editElement($id)
     {
         $this->editingElementData = collect($this->formElements)->firstWhere('id', $id);
+
+        // Inisialisasi properti 'presence' berdasarkan data yang ada
+        if (isset($this->editingElementData['validation']['required']) && $this->editingElementData['validation']['required'] === true) {
+            $this->presence = 'required';
+        } elseif (isset($this->editingElementData['validation']['nullable']) && $this->editingElementData['validation']['nullable'] === true) {
+            $this->presence = 'nullable';
+        } else {
+            $this->presence = 'optional';
+        }
         $this->dispatch('show-edit-modal');
     }
 
@@ -106,6 +133,9 @@ class FormBuilder extends Component
         $elementToMove = $this->formElements[$elementIndex];
         array_splice($this->formElements, $elementIndex, 1);
         array_splice($this->formElements, $newIndex, 0, [$elementToMove]);
+
+        // Automatically save the entire form if it already exists
+        $this->persistFormChanges();
     }
 
     // In your App\Http\Livewire\FormBuilder.php or similar file:
@@ -127,6 +157,9 @@ class FormBuilder extends Component
         $options[$newIndex] = $optionToMove;
 
         $this->editingElementData['options'] = $options;
+
+        // Automatically save the entire form if it already exists
+        $this->persistFormChanges();
     }
 
 
@@ -144,6 +177,9 @@ class FormBuilder extends Component
 
         $this->editingElementData = [];
         $this->dispatch('hide-edit-modal');
+
+        // Automatically save the entire form if it already exists
+        $this->persistFormChanges();
     }
 
     public function addOption()
@@ -156,6 +192,21 @@ class FormBuilder extends Component
         unset($this->editingElementData['options'][$index]);
         $this->editingElementData['options'] = array_values($this->editingElementData['options']);
     }
+
+    /**
+     * Lifecycle hook yang dipanggil saat properti 'presence' diperbarui.
+     * Ini akan mengatur aturan validasi 'required' dan 'nullable'.
+     */
+    public function updatedPresence($value)
+    {
+        $this->editingElementData['validation']['required'] = ($value === 'required');
+        $this->editingElementData['validation']['nullable'] = ($value === 'nullable');
+
+        // Hapus kunci jika nilainya false untuk menjaga kebersihan data
+        if (!$this->editingElementData['validation']['required']) unset($this->editingElementData['validation']['required']);
+        if (!$this->editingElementData['validation']['nullable']) unset($this->editingElementData['validation']['nullable']);
+    }
+
 
     public function saveForm()
     {
@@ -187,6 +238,22 @@ class FormBuilder extends Component
         $this->formElements = array_values(array_filter($this->formElements, function ($element) use ($id) {
             return $element['id'] !== $id;
         }));
+
+        // Automatically save the entire form if it already exists
+        $this->persistFormChanges();
+    }
+
+    /**
+     * Persists the current state of the form to the database without dispatching events.
+     * This is used for auto-saving when an element is updated.
+     */
+    private function persistFormChanges()
+    {
+        if ($this->formId) {
+            FormBuilderForm::where('id', $this->formId)->update([
+                'elements' => $this->formElements,
+            ]);
+        }
     }
 
     private function generateButtonClasses(string $color): string
@@ -196,6 +263,73 @@ class FormBuilder extends Component
         $colorClasses = "text-white bg-{$color}-700 hover:bg-{$color}-800 focus:ring-4 focus:ring-{$color}-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-{$color}-600 dark:hover:bg-{$color}-700 focus:outline-none dark:focus:ring-{$color}-800";
 
         return "{$baseClasses} {$colorClasses}";
+    }
+
+    public function validatePreview()
+    {
+        $rules = [];
+        $attributes = [];
+
+        foreach ($this->formElements as $element) {
+            // Hanya validasi elemen yang memiliki 'name' dan 'validation'
+            if (!empty($element['id']) && !empty($element['validation'])) {
+                $key = 'previewData.' . $element['id'];
+                $elementRules = [];
+                if (is_array($element['validation'])) {
+                    foreach ($element['validation'] as $rule => $parameter) {
+                        if ($parameter !== false && $parameter !== null) {
+                            if ($rule === 'required_if' && is_array($parameter)) {
+                                // Handle required_if:field,value
+                                if (isset($parameter['field']) && isset($parameter['value'])) {
+                                    $elementRules[] = 'required_if:' . $parameter['field'] . ',' . $parameter['value'];
+                                }
+                            } elseif ($rule === 'required_with' && is_array($parameter)) {
+                                // Handle required_with:field1,field2,...
+                                if (!empty($parameter)) {
+                                    $elementRules[] = 'required_with:' . implode(',', $parameter);
+                                }
+                            } elseif ($rule === 'regex' && !is_array($parameter)) {
+                                // For regex, the pattern is the parameter.
+                                $elementRules[] = 'regex:/' . $parameter . '/';
+                            } elseif ($parameter === true) {
+                                // For rules like 'required' => true
+                                $elementRules[] = $rule;
+                            } elseif (!is_array($parameter)) {
+                                // For rules with simple parameters like 'min:5', 'max:10', 'gt:0', 'lt:100'
+                                $elementRules[] = $rule . ':' . $parameter;
+                            }
+                        }
+                    }
+                }
+                $rules[$key] = $elementRules;
+                $attributes[$key] = $element['label'];
+            }
+        }
+
+        if (empty($rules)) {
+            // Tidak ada yang perlu divalidasi, mungkin tampilkan pesan sukses
+            $this->dispatch('validation-success', message: 'No validation rules to check. (rules is empty)');
+            return;
+        }
+
+        try {
+            $this->validate($rules, messages: [], attributes: $attributes);
+            // Jika validasi berhasil, tampilkan pesan sukses
+            $this->dispatch('validation-success', message: 'Validation passed successfully!');
+        } catch (ValidationException $e) {
+            // Biarkan Livewire menangani tampilan error, tetapi kita bisa menangkapnya jika perlu tindakan kustom
+            // Tidak perlu melakukan apa-apa di sini karena Livewire akan secara otomatis menampilkan error
+            throw $e;
+        }
+    }
+    public function resetPreviewForm()
+    {
+        $this->previewData = [];
+    }
+
+    public function resetPreviewValidation()
+    {
+        $this->resetValidation();
     }
 
     // Gunakan #[Layout] untuk menentukan layout secara langsung

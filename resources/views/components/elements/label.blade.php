@@ -17,9 +17,9 @@
     @if (isset($element['attr']) && $element['type'] === 'text-block')
         {!! "<{$element['attr']} class='$elementClass'>" . $element['label'] . "</{$element['attr']}>" !!}
     @else
-        <label class="w-fit pl-0.5 text-sm">
+        <label class="w-fit pl-0.5 text-sm" for="{{ $element['id'] }}">
             {{ $element['label'] ?? '' }}
-            {!! isset($element['required']) && $element['required'] ? '<span class="text-red-500">*</span>' : '' !!}
+            {!! isset($element['validation']['required']) && $element['validation']['required'] ? '<span class="text-red-500">*</span>' : '' !!}
         </label>
     @endif
 @endif
