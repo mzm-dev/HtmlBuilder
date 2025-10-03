@@ -1,13 +1,9 @@
+@section('title', $form->title ?? 'Form Builder MZM')
+
 @php
     use Mzm\HtmlBuilder\Enums\ElementType;
 @endphp
 <div x-data="formsubmit">
-    @if (session()->has('message'))
-        <div class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg" role="alert">
-            {{ session('message') }}
-        </div>
-    @endif
-
     @if ($form)
         <form wire:submit="save" class="max-w-5xl mx-auto m-4 p-4 bg-white border border-gray-100 shadow-md rounded-lg">
             <div class="grid grid-cols-4 gap-2">
