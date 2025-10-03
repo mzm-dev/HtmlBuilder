@@ -10,14 +10,14 @@
             @if (
                 $element['id'] !== $editingElementData['id'] &&
                     in_array($element['type'], [
-                        'text-input',
-                        'number-input',
-                        'email',
-                        'textarea-input',
-                        'date',
-                        'select-input',
-                        'radio-buttons',
-                        'checkbox-buttons',
+                        'input-text',
+                        'input-number',
+                        'input-email',
+                        'input-textarea-input',
+                        'input-date',
+                        'input-select-input',
+                        'input-radio-buttons',
+                        'input-checkbox-buttons',
                     ]))
                 <label for="chk-{{ $element['id'] }}-{{ $key }}"
                     class="flex items-center gap-2 text-sm font-medium text-neutral-600 dark:text-neutral-300 has-checked:text-neutral-900 dark:has-checked:text-white has-disabled:cursor-not-allowed has-disabled:opacity-75">

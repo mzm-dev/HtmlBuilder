@@ -8,7 +8,7 @@
             <select wire:model.defer="editingElementData.validation.required_if.field" id="required_if_field"
                 class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                 <option value="">-- Select a field --</option>
-                @foreach (collect($formElements)->whereIn('type', ['text-input', 'number-input', 'email', 'textarea-input', 'select-input', 'radio-buttons', 'checkbox-buttons']) as $element)
+                @foreach (collect($formElements)->whereIn('type', ['input-text', 'input-number', 'input-email', 'input-textarea-input', 'input-select-input', 'input-radio-buttons', 'input-checkbox-buttons']) as $element)
                     {{-- Don't allow an element to depend on itself --}}
                     @if ($element['id'] !== $editingElementData['id'])
                         @php

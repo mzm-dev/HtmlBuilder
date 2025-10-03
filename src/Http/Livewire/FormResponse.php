@@ -22,7 +22,7 @@ class FormResponse extends Component
     #[Layout('mzm-html-builder::components.layouts.form-builder')]
     public function render()
     {
-        $responses = FormBuilderResponse::where('form_id', $this->form->id)->paginate();
+        $responses = FormBuilderResponse::with('form')->where('form_id', $this->form->id)->paginate();
 
         return view('mzm-html-builder::livewire.form-response', [
             'responses' => $responses,

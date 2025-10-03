@@ -27,14 +27,14 @@ class FormBuilder extends Component
             $this->formElements = $form->elements;
             foreach ($this->formElements as $element) { // Assign dynamic variable on previewData
                 switch ($element['type']) {
-                    case 'text-input':
+                    case 'input-text':
                     case 'email':
-                    case 'number-input':
-                    case 'date':
+                    case 'input-number':
+                    case 'input-date':
                     case 'textarea-input':
-                    case 'select-input':
-                    case 'radio-buttons':
-                    case 'checkbox-buttons':
+                    case 'input-select-input':
+                    case 'input-radio-buttons':
+                    case 'input-checkbox-buttons':
                         $this->previewData[$element['id']] = null;
                         break;
                 }
@@ -59,11 +59,16 @@ class FormBuilder extends Component
                 ['value' => 'value2', 'label' => 'Option 2'],
                 ['value' => 'value3', 'label' => 'Option 3']
             ] : [],
-            'attributes' => $type === 'button' ? [
-                'color' => 'green',
-                'type' => 'button',
-                'class' => $this->generateButtonClasses('green'),
-            ] : [],
+            'attributes' =>  [
+                'color' => null,
+                'type' =>  null,
+                'class' =>  null,
+            ],
+            // 'attributes' => $type === 'button' ? [
+            //     'color' => 'green',
+            //     'type' => 'button',
+            //     'class' => $this->generateButtonClasses('green'),
+            // ] : [],
         ];
         $this->formElements[] = $newElement;
     }
@@ -166,10 +171,6 @@ class FormBuilder extends Component
     public function saveElement()
     {
         $index = collect($this->formElements)->search(fn($element) => $element['id'] === $this->editingElementData['id']);
-        if ($this->editingElementData['type'] === 'button' && isset($this->editingElementData['attributes']['color'])) {
-            $color = $this->editingElementData['attributes']['color'];
-            $this->editingElementData['attributes']['class'] = $this->generateButtonClasses($color);
-        }
 
         if ($index !== false) {
             $this->formElements[$index] = $this->editingElementData;
@@ -256,15 +257,6 @@ class FormBuilder extends Component
         }
     }
 
-    private function generateButtonClasses(string $color): string
-    {
-        $baseClasses = '';
-
-        $colorClasses = "text-white bg-{$color}-700 hover:bg-{$color}-800 focus:ring-4 focus:ring-{$color}-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-{$color}-600 dark:hover:bg-{$color}-700 focus:outline-none dark:focus:ring-{$color}-800";
-
-        return "{$baseClasses} {$colorClasses}";
-    }
-
     public function validatePreview()
     {
         $rules = [];
@@ -325,6 +317,7 @@ class FormBuilder extends Component
     public function resetPreviewForm()
     {
         $this->previewData = [];
+        $this->resetPreviewValidation();
     }
 
     public function resetPreviewValidation()

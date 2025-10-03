@@ -6,8 +6,10 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 use Mzm\HtmlBuilder\Http\Livewire\FormBuilder;
-use Mzm\HtmlBuilder\Http\Livewire\FormViewer;
+use Mzm\HtmlBuilder\Http\Livewire\FormHome;
 use Mzm\HtmlBuilder\Http\Livewire\FormList;
+use Mzm\HtmlBuilder\Http\Livewire\FormResponse;
+use Mzm\HtmlBuilder\Http\Livewire\FormSubmit;
 
 class HtmlBuilderServiceProvider extends ServiceProvider
 {
@@ -15,16 +17,16 @@ class HtmlBuilderServiceProvider extends ServiceProvider
     {
         // Register the Livewire component
         Livewire::component('mzm-html-builder::form-builder', FormBuilder::class);
-        Livewire::component('mzm-html-builder::form-viewer', FormViewer::class);
+        Livewire::component('mzm-html-builder::form-home', FormHome::class);
         Livewire::component('mzm-html-builder::form-list', FormList::class);
+        Livewire::component('mzm-html-builder::form-response', FormResponse::class);
+        Livewire::component('mzm-html-builder::form-submit', FormSubmit::class);
 
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'mzm-html-builder');
 
         $this->registerRoutes();
 
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-
-        $this->publishAssets();
     }
 
     protected function registerRoutes()
@@ -40,12 +42,5 @@ class HtmlBuilderServiceProvider extends ServiceProvider
             'prefix' => 'html-builder',
             'middleware' => ['web']
         ];
-    }
-
-    protected function publishAssets()
-    {
-        $this->publishes([
-            __DIR__ . '/../resources/views' => resource_path('views/vendor/mzm-html-builder'),
-        ], 'mzm-html-builder-views');
     }
 }

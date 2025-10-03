@@ -22,7 +22,7 @@
 
             <form wire:submit.prevent="saveElement" class="flex-grow overflow-y-auto px-8 py-4">
                 {{-- Common fields --}}
-                <x-mzm-html-builder::options.fields :editingElementData="$editingElementData" :formElements="$formElements" />
+                <x-mzm-html-builder::element-options :editingElementData="$editingElementData" :formElements="$formElements" />
             </form>
             <div
                 class="flex flex-col-reverse justify-between gap-2 border-t border-neutral-300 bg-neutral-50/60 p-4 sm:flex-row sm:items-center md:justify-end">

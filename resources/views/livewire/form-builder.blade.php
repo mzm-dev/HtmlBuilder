@@ -1,3 +1,6 @@
+@php
+    use Mzm\HtmlBuilder\Enums\ElementType;
+@endphp
 <div x-data="formbuilder" x-on:show-edit-modal.window="showModal = true" x-on:hide-edit-modal.window="showModal = false"
     class="relative flex w-full flex-col md:flex-row" x-init="showPreviewModal = false">
 
@@ -35,56 +38,56 @@
             <ul>
 
                 <li class="py-0.5 border-neutral-300 dark:border-neutral-700">
-                    <button type="button" wire:click="addElement('text-input')"
+                    <button type="button" wire:click="addElement('input-text')"
                         class="cursor-pointer flex items-center w-full gap-2 px-2 py-1.5 text-sm rounded-sm text-neutral-600 underline-offset-2 hover:bg-black/5 hover:text-neutral-900 focus-visible:underline focus:outline-hidden dark:text-neutral-300 dark:hover:bg-white/5 dark:hover:text-white">
                         <i class="fa-solid fa-i-cursor w-6 text-center text-gray-500 fa-sm"></i>
                         <span>Text Input</span>
                     </button>
                 </li>
                 <li class="py-0.5 border-neutral-300 dark:border-neutral-700">
-                    <button type="button" wire:click="addElement('email')"
+                    <button type="button" wire:click="addElement('input-email')"
                         class="cursor-pointer flex items-center w-full gap-2 px-2 py-1.5 text-sm rounded-sm text-neutral-600 underline-offset-2 hover:bg-black/5 hover:text-neutral-900 focus-visible:underline focus:outline-hidden dark:text-neutral-300 dark:hover:bg-white/5 dark:hover:text-white">
                         <i class="fa-solid fa-at w-6 text-center text-gray-500 fa-sm"></i>
                         <span>Email Input</span>
                     </button>
                 </li>
                 <li class="py-0.5 border-neutral-300 dark:border-neutral-700">
-                    <button type="button" wire:click="addElement('number-input')"
+                    <button type="button" wire:click="addElement('input-number')"
                         class="cursor-pointer flex items-center w-full gap-2 px-2 py-1.5 text-sm rounded-sm text-neutral-600 underline-offset-2 hover:bg-black/5 hover:text-neutral-900 focus-visible:underline focus:outline-hidden dark:text-neutral-300 dark:hover:bg-white/5 dark:hover:text-white">
                         <i class="fa-solid fa-hashtag w-6 text-center text-gray-500 fa-sm"></i>
                         <span>Number Input</span>
                     </button>
                 </li>
                 <li class="py-0.5 border-neutral-300 dark:border-neutral-700">
-                    <button type="button" wire:click="addElement('date')"
+                    <button type="button" wire:click="addElement('input-date')"
                         class="cursor-pointer flex items-center w-full gap-2 px-2 py-1.5 text-sm rounded-sm text-neutral-600 underline-offset-2 hover:bg-black/5 hover:text-neutral-900 focus-visible:underline focus:outline-hidden dark:text-neutral-300 dark:hover:bg-white/5 dark:hover:text-white">
                         <i class="fa-solid fa-calendar-day w-6 text-center text-gray-500 fa-sm"></i>
                         <span>Date Field</span>
                     </button>
                 </li>
                 <li class="py-0.5 border-neutral-300 dark:border-neutral-700">
-                    <button type="button" wire:click="addElement('textarea-input')"
+                    <button type="button" wire:click="addElement('input-textarea-input')"
                         class="cursor-pointer flex items-center w-full gap-2 px-2 py-1.5 text-sm rounded-sm text-neutral-600 underline-offset-2 hover:bg-black/5 hover:text-neutral-900 focus-visible:underline focus:outline-hidden dark:text-neutral-300 dark:hover:bg-white/5 dark:hover:text-white">
                         <i class="fa-solid fa-rectangle-list  w-6 text-center text-gray-500 fa-sm"></i>
                         <span>Textarea</span>
                     </button>
                 </li>
                 <li class="py-0.5 border-neutral-300 dark:border-neutral-700">
-                    <button type="button" wire:click="addElement('select-input','options')"
+                    <button type="button" wire:click="addElement('input-select-input','options')"
                         class="cursor-pointer flex items-center w-full gap-2 px-2 py-1.5 text-sm rounded-sm text-neutral-600 underline-offset-2 hover:bg-black/5 hover:text-neutral-900 focus-visible:underline focus:outline-hidden dark:text-neutral-300 dark:hover:bg-white/5 dark:hover:text-white">
                         <i class="fa-solid fa-chevron-down w-6 text-center text-gray-500 fa-sm"></i>
                         <span>Select Dropdown</span>
                     </button>
                 </li>
                 <li class="py-0.5 border-neutral-300 dark:border-neutral-700">
-                    <button type="button" wire:click="addElement('radio-buttons','options')"
+                    <button type="button" wire:click="addElement('input-radio-buttons','options')"
                         class="cursor-pointer flex items-center w-full gap-2 px-2 py-1.5 text-sm rounded-sm text-neutral-600 underline-offset-2 hover:bg-black/5 hover:text-neutral-900 focus-visible:underline focus:outline-hidden dark:text-neutral-300 dark:hover:bg-white/5 dark:hover:text-white">
                         <i class="fa-regular fa-dot-circle w-6 text-center text-gray-500 fa-sm"></i>
                         <span>Radio Buttons</span>
                     </button>
                 </li>
                 <li class="py-0.5 border-neutral-300 dark:border-neutral-700">
-                    <button type="button" wire:click="addElement('checkbox-buttons','options')"
+                    <button type="button" wire:click="addElement('input-checkbox-buttons','options')"
                         class="cursor-pointer flex items-center w-full gap-2 px-2 py-1.5 text-sm rounded-sm text-neutral-600 underline-offset-2 hover:bg-black/5 hover:text-neutral-900 focus-visible:underline focus:outline-hidden dark:text-neutral-300 dark:hover:bg-white/5 dark:hover:text-white">
                         <i class="fa-regular fa-check-square w-6 text-center text-gray-500 fa-sm"></i>
                         <span>Checkbox Buttons</span>
@@ -149,9 +152,10 @@
                         <p class="mt-2">Click on an element from the left panel to add it to your form.</p>
                     </div>
                 @else
-                    <div class="grid grid-cols-4 gap-4">
+                    <div class="grid grid-cols-4 gap-2">
                         @foreach ($formElements as $element)
                             @php
+
                                 $colspan = $element['colspan'] ?? 3;
                             @endphp
                             <div
@@ -171,12 +175,12 @@
                                         <i class="fa-solid fa-arrow-down fa-sm"></i>
                                     </x-mzm-html-builder::action-button>
                                     <!-- Edit Handle -->
-                                    @if ($element['type'] != 'separator')
-                                        <x-mzm-html-builder::action-button color="yellow"
-                                            wire:click.stop="editElement('{{ $element['id'] }}')">
-                                            <i class="fa-solid fa-pencil fa-sm"></i>
-                                        </x-mzm-html-builder::action-button>
-                                    @endif
+                                    {{-- @if ($element['type'] != 'separator') --}}
+                                    <x-mzm-html-builder::action-button color="yellow"
+                                        wire:click.stop="editElement('{{ $element['id'] }}')">
+                                        <i class="fa-solid fa-pencil fa-sm"></i>
+                                    </x-mzm-html-builder::action-button>
+                                    {{-- @endif --}}
                                     <!-- Duplicate Handle -->
                                     <x-mzm-html-builder::action-button color="blue"
                                         wire:click.stop="duplicateElement('{{ $element['id'] }}')">
@@ -190,37 +194,26 @@
                                 </div>
                                 <div class="flex-grow">
                                     @switch($element['type'])
-                                        @case('text-input')
-                                        @case('email')
+                                        @case(ElementType::InputText->value)
+                                        @case(ElementType::InputEmail->value)
 
-                                        @case('number-input')
-                                        @case('date')
+                                        @case(ElementType::InputNumber->value)
+                                        @case(ElementType::InputDate->value)
 
-                                        @case('textarea-input')
-                                        @case('select-input')
+                                        @case(ElementType::InputTextarea->value)
+                                        @case(ElementType::InputSelect->value)
 
-                                        @case('radio-buttons')
-                                        @case('checkbox-buttons')
-                                            @if ($element['id'])
-                                                <div wire:key="preview-{{ $element['id'] }}">
-                                                    @include(
-                                                        'mzm-html-builder::livewire.preview.input-wrapper',
-                                                        [
-                                                            'element' => $element,
-                                                            'name' => $element['id'],
-                                                        ]
-                                                    )
-                                                </div>
-                                            @else
-                                                {{-- Render elemen tanpa binding jika tidak ada 'name' --}}
+                                        @case(ElementType::InputRadio->value)
+                                        @case(ElementType::InputCheckbox->value)
+                                            <div wire:key="preview-{{ $element['id'] }}">
                                                 @include(
-                                                    'mzm-html-builder::livewire.preview.static-element',
+                                                    'mzm-html-builder::livewire.preview.input-wrapper',
                                                     [
                                                         'element' => $element,
+                                                        'name' => $element['id'],
                                                     ]
                                                 )
-                                                @include('mzm-html-builder::livewire.preview.static-element', ['element' => $element])
-                                            @endif
+                                            </div>
                                         @break
 
                                         @default

@@ -1,6 +1,6 @@
 <div class="flex flex-col">
 
-    <a href="#"
+    <a href="{{ route('form-builder.home') }}"
         class="flex items-center rounded-radius gap-2 px-2 py-1.5 text-sm font-medium text-on-surface underline-offset-2 hover:bg-primary/5 hover:text-on-surface-strong focus-visible:underline focus:outline-hidden dark:text-on-surface-dark dark:hover:bg-primary-dark/5 dark:hover:text-on-surface-dark-strong">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5 shrink-0"
             aria-hidden="true">
@@ -23,16 +23,16 @@
     </a>
 
     <ul class="pl-4">
+         <li class="border-l px-2 py-0.5 border-neutral-300 dark:border-neutral-700">
+            <a href="{{ route('form-builder.form') }}"
+                class="flex items-center gap-2 px-2 py-1.5 text-sm rounded-sm text-neutral-600 underline-offset-2 hover:bg-black/5 hover:text-neutral-900 focus-visible:underline focus:outline-hidden dark:text-neutral-300 dark:hover:bg-white/5 dark:hover:text-white">
+                <span>Builder</span>
+            </a>
+        </li>
         <li class="border-l px-2 py-0.5 border-neutral-300 dark:border-neutral-700">
             <a href="{{ route('form-builder.list') }}"
                 class="flex items-center gap-2 px-2 py-1.5 text-sm rounded-sm text-neutral-600 underline-offset-2 hover:bg-black/5 hover:text-neutral-900 focus-visible:underline focus:outline-hidden dark:text-neutral-300 dark:hover:bg-white/5 dark:hover:text-white">
                 <span>All Forms</span>
-            </a>
-        </li>
-        <li class="border-l px-2 py-0.5 border-neutral-300 dark:border-neutral-700">
-            <a href="{{ route('form-builder.form') }}"
-                class="flex items-center gap-2 px-2 py-1.5 text-sm rounded-sm text-neutral-600 underline-offset-2 hover:bg-black/5 hover:text-neutral-900 focus-visible:underline focus:outline-hidden dark:text-neutral-300 dark:hover:bg-white/5 dark:hover:text-white">
-                <span>Builder</span>
             </a>
         </li>
     </ul>

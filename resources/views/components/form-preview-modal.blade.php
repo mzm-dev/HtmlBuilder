@@ -1,5 +1,7 @@
 @props(['formTitle', 'formDescriptions', 'formElements'])
-
+@php
+    use Mzm\HtmlBuilder\Enums\ElementType;
+@endphp
 <div x-show="showPreviewModal" x-cloak x-transition:enter="transition ease-out duration-300"
     x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
     x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100"
@@ -44,33 +46,23 @@
                             @endphp
                             <div class="mb-1 rounded-lg col-span-{{ $colspan }}">
                                 @switch($element['type'])
-                                    @case('text-input')
-                                    @case('email')
+                                    @case(ElementType::InputText->value)
+                                    @case(ElementType::InputEmail->value)
 
-                                    @case('number-input')
-                                    @case('date')
+                                    @case(ElementType::InputNumber->value)
+                                    @case(ElementType::InputDate->value)
 
-                                    @case('textarea-input')
-                                    @case('select-input')
+                                    @case(ElementType::InputTextarea->value)
+                                    @case(ElementType::InputSelect->value)
 
-                                    @case('radio-buttons')
-                                    @case('checkbox-buttons')
-                                        @if ($name)
-                                            <div wire:key="preview-{{ $element['id'] }}">
-                                                @include(
-                                                    'mzm-html-builder::livewire.preview.input-wrapper',
-                                                    [
-                                                        'element' => $element,
-                                                        'name' => $name,
-                                                    ]
-                                                )
-                                            </div>
-                                        @else
-                                            {{-- Render elemen tanpa binding jika tidak ada 'name' --}}
-                                            @include('mzm-html-builder::livewire.preview.static-element', [
+                                    @case(ElementType::InputRadio->value)
+                                    @case(ElementType::InputCheckbox->value)
+                                        <div wire:key="preview-{{ $element['id'] }}">
+                                            @include('mzm-html-builder::livewire.preview.input-wrapper', [
                                                 'element' => $element,
+                                                'name' => $name,
                                             ])
-                                        @endif
+                                        </div>
                                     @break
 
                                     @default
@@ -88,7 +80,8 @@
 
         {{-- Modal Footer --}}
         <div class="flex justify-between items-center px-8 py-4 border-t">
-            <button type="button" x-on:click="showPreviewModal = false; $wire.resetPreviewValidation();$set('previewData', [])"
+            <button type="button"
+                x-on:click="showPreviewModal = false; $wire.resetPreviewValidation();$set('previewData', [])"
                 class="px-6 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 font-semibold">Close</button>
             <div class="flex space-x-4">
                 <button type="button" wire:click="$set('previewData', [])"

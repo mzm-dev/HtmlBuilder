@@ -1,3 +1,6 @@
+@php
+    use Illuminate\Support\Str;
+@endphp
 <div x-data="formlist" class="relative flex w-full flex-col md:flex-row">
     <!-- main content  -->
     <div class="h-svh w-full overflow-y-auto bg-white dark:bg-neutral-950">
@@ -23,6 +26,7 @@
                         </thead>
                         <tbody class="divide-y divide-neutral-300 dark:divide-neutral-700">
                             @forelse ($forms as $form)
+
                                 <tr class="even:bg-black/5 dark:even:bg-white/10" wire:key="form-{{ $form->id }}">
                                     <td class="p-4">
                                         {{ $forms->firstItem() + $loop->index }}
@@ -31,12 +35,18 @@
 
                                     <td class="p-4 text-center">{{ count($form->elements) }}</td>
                                     <td class="p-4 flex items-center justify-center">
-                                        <a href="{{ count($form->response) ? route('form-builder.response', $form->id) : 'javascript:void(0);' }} " class="whitespace-nowrap rounded-sm bg-transparent p-0.5 font-semibold {{ count($form->response) ? 'text-purple-600 outline-purple-600 dark:text-purple-400 dark:outline-purple-400' : 'text-gray-400 outline-gray-400 dark:text-gray-600 dark:outline-gray-600' }} hover:opacity-75 focus-visible:outline-2 focus-visible:outline-offset-2 active:opacity-100 active:outline-offset-0">
+                                        <a href="{{ count($form->response) ? route('form-builder.response-list', $form->id) : 'javascript:void(0);' }} "
+                                            class="whitespace-nowrap rounded-sm bg-transparent p-0.5 font-semibold {{ count($form->response) ? 'text-purple-600 outline-purple-600 dark:text-purple-400 dark:outline-purple-400' : 'text-gray-400 outline-gray-400 dark:text-gray-600 dark:outline-gray-600' }} hover:opacity-75 focus-visible:outline-2 focus-visible:outline-offset-2 active:opacity-100 active:outline-offset-0">
                                             <span>{{ count($form->response) }}</span>
                                         </a>
                                     </td>
+
                                     <td class="p-4">{{ $form->created_at->format('Y-m-d H:i') }}</td>
                                     <td class="p-4 space-x-2 whitespace-nowrap">
+                                        <a target="_blank" href="{{ route('form-builder.response', $form->id) }}"
+                                            class="whitespace-nowrap rounded-sm bg-transparent p-0.5 font-semibold text-green-600 outline-green-600 hover:opacity-75 focus-visible:outline-2 focus-visible:outline-offset-2 active:opacity-100 active:outline-offset-0 dark:text-green-400 dark:outline-blue-400">
+                                            New Response
+                                        </a>
                                         <a href="{{ route('form-builder.form', $form->id) }}"
                                             class="whitespace-nowrap rounded-sm bg-transparent p-0.5 font-semibold text-blue-600 outline-blue-600 hover:opacity-75 focus-visible:outline-2 focus-visible:outline-offset-2 active:opacity-100 active:outline-offset-0 dark:text-blue-400 dark:outline-blue-400">
                                             Edit
@@ -50,7 +60,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="p-4 text-center text-gray-500">
+                                    <td colspan="6" class="p-4 text-center text-gray-500">
                                         No forms found.
                                     </td>
                                 </tr>

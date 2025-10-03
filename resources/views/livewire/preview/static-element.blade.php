@@ -1,15 +1,19 @@
-@props(['element'])
+@props(['formElements','element'])
+
+@php
+    use Mzm\HtmlBuilder\Enums\ElementType;
+@endphp
 
 @switch($element['type'])
-    @case('button')
+    @case(ElementType::Button->value)
         <x-mzm-html-builder::elements.button :element="$element" :wire-model="true" />
     @break
 
-    @case('text-block')
+    @case(ElementType::TextBlock->value)
         <x-mzm-html-builder::elements.text-block :element="$element" />
     @break
 
-    @case('separator')
+    @case(ElementType::Separator->value)
         <x-mzm-html-builder::elements.separator :element="$element" />
     @break
 

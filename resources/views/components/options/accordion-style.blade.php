@@ -17,10 +17,11 @@
         <div x-cloak x-show="isExpanded" id="accordionRule" role="region" aria-labelledby="controlsAccordionStyles"
             x-collapse>
             <div class="p-4">
-                @if ($type == 'button')
+                @if (in_array($type, ['button', 'separator']))
                     <x-mzm-html-builder::options.colors :editingElementData="$editingElementData" />
                 @endif
                 <x-mzm-html-builder::options.width :editingElementData="$editingElementData" />
+                <x-mzm-html-builder::options.classes :editingElementData="$editingElementData" />
             </div>
         </div>
     </div>

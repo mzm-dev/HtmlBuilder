@@ -34,6 +34,16 @@ class FormBuilderResponse extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'elements' => 'array',
+        'data' => 'array',
     ];
+
+    /**
+     * Get the form that owns the FormBuilderResponse
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function form()
+    {
+        return $this->belongsTo(FormBuilderForm::class, 'form_id', 'id');
+    }
 }
