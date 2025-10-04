@@ -15,6 +15,7 @@ return new class extends Migration
 
             $table->uuid('id')->primary(); // UUID untuk kunci utama
             $table->string('title');
+            $table->text('descriptions')->nullable();
             $table->json('elements'); // Lajur JSON untuk struktur borang
             $table->timestamps();
             $table->softDeletes();
