@@ -28,6 +28,7 @@ class FormBuilderForm extends Model
     protected $fillable = [
         'title',
         'descriptions',
+        'config',
         'elements',
     ];
 
@@ -37,6 +38,7 @@ class FormBuilderForm extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'config' => 'array',
         'elements' => 'array',
     ];
 

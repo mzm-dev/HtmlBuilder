@@ -112,12 +112,12 @@
                 <h1 class="text-3xl font-bold text-gray-800">Form Builder</h1>
                 <div class="flex items-center space-x-4">
                     <button type="button" x-on:click="showPreviewModal = true"
-                        class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700">
+                        class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-colors duration-200  focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700">
                         <i class="fa-solid fa-eye fa-sm"></i>
                         <span>Preview</span>
                     </button>
                     <button type="button" wire:click="saveForm"
-                        class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-700">
+                        class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-700">
                         <i class="fa-solid fa-save fa-sm"></i>
                         <span>Save Form</span>
                     </button>
@@ -141,6 +141,7 @@
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
                 </div>
+                <x-mzm-html-builder::config-form :authentication="$authentication" :grids="$grids" :render="$render" />
             </div>
             <div class="bg-white p-8 rounded-xl shadow-lg min-h-[600px]">
 
@@ -152,17 +153,15 @@
                         <p class="mt-2">Click on an element from the left panel to add it to your form.</p>
                     </div>
                 @else
-                    <div class="grid grid-cols-4 gap-2">
+                    <div class="grid grid-cols-{{ $grids['col'] }} gap-{{ $grids['gap'] }}">
                         @foreach ($formElements as $element)
                             @php
-
                                 $colspan = $element['colspan'] ?? 3;
                             @endphp
                             <div
-                                class="mb-1 border border-gray-300 p-4 rounded-lg hover:border-blue-500 hover:shadow-md transition-all duration-200 relative group items-start col-span-{{ $colspan }}">
+                                class="mb-1 border border-gray-300 p-2 rounded-md hover:border-blue-500 hover:shadow-md transition-all duration-200 relative group items-start col-span-{{ $colspan }}">
                                 <!-- Clickable Area for Editing -->
-                                <div
-                                    class="flex flex-row ms-3 mb-1 sm:float-none space-x-1 {{ $colspan == 1 ? 'md:float-none' : 'md:float-right' }}">
+                                <div class="flex flex-row sm:float-none space-x-1 md:float-right">
                                     <!-- Up Handle -->
                                     <x-mzm-html-builder::action-button
                                         wire:click.stop="moveElement('{{ $element['id'] }}', 'up')" :disabled="$loop->first">
@@ -231,7 +230,8 @@
         </div>
     </div>
 
-    <x-mzm-html-builder::edit-element-modal :editing-element-data="$editingElementData" :form-elements="$formElements" />
+
+    <x-mzm-html-builder::edit-element-modal :editing-element-data="$editingElementData" :form-elements="$formElements" :grids="$grids" />
     <x-mzm-html-builder::form-preview-modal :form-title="$formTitle" :form-descriptions="$formDescriptions" :form-elements="$formElements" />
 </div>
 @script

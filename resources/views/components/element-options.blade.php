@@ -23,4 +23,4 @@
 @if (!empty($config['rules']))
     <x-mzm-html-builder::options.accordion-rules :editingElementData="$editingElementData" :formElements="$formElements" :rules="$config['rules']" />
 @endif
-<x-mzm-html-builder::options.accordion-style :editingElementData="$editingElementData" :formElements="$formElements" :type="$type" />
+<x-mzm-html-builder::options.accordion-style :editingElementData="$editingElementData" :formElements="$formElements" :type="$type" :grids="$grids" />

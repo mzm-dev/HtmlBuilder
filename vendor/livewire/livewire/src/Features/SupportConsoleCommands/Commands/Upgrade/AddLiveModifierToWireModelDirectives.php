@@ -12,9 +12,9 @@ class AddLiveModifierToWireModelDirectives extends UpgradeStep
             console: $console,
             title: 'The wire:model directive is now deferred by default.',
             before: 'wire:model',
-            after: 'wire:model.live',
+            after: 'wire:model.defer',
             pattern: '/wire:model(?!\.(?:defer|lazy|live))/',
-            replacement: 'wire:model.live',
+            replacement: 'wire:model.defer',
         );
 
         return $next($console);

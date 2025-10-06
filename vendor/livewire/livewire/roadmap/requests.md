@@ -1,6 +1,6 @@
 ## Concrete things we want
 - [x] `wire:poll` to be non-blocking and cancellable by default
-- [x] `wire:model.live` should cancel any existing component requests
+- [x] `wire:model.defer` should cancel any existing component requests
 - [x] Triggering an action `wire:click` should cancel any existing component requests
 - [x] different components can make parallel requests
 - [ ] Streamed responses can be intentionally stopped
@@ -29,7 +29,7 @@
 ## Ways to trigger a commit:
 * `wire:click="$refresh|$set|$toggle"`
 * Empty `wire:poll`
-* `wire:model.live`
+* `wire:model.defer`
 * JS `$wire.$commit` or `$wire.$set(...)`
 
 ## Proposal

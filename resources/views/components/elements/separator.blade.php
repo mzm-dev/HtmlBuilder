@@ -1,7 +1,7 @@
 @props(['element'])
 
 @php
-    $border = $element['attributes']['border'] ?? null;
+    $border = $element['attributes']['border'] ?? 'none';
     $color = $element['attributes']['color'] ?? 'gray';
     $borderColorClass = "border-{$color}-300 dark:border-{$color}-600";
 @endphp

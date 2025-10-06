@@ -7,13 +7,21 @@ use Mzm\HtmlBuilder\Models\FormBuilderForm;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 
+use function PHPUnit\Framework\isEmpty;
+
 class FormBuilder extends Component
 {
     public $formElements = [];
     public $editingElementData = [];
+
     public $formId;
     public $formTitle = 'My New Form';
     public $formDescriptions = 'My New Form Descriptions';
+    public $grids = [];
+    public $authentication = [];
+    public $render = [];
+
+    public $formConfig = [];
     public $previewData = [];
     public $presence = 'optional'; // Properti baru untuk radio button
 
@@ -24,7 +32,17 @@ class FormBuilder extends Component
             $this->formId = $form->id;
             $this->formTitle = $form->title;
             $this->formDescriptions = $form->descriptions;
+            $this->formConfig = $form->config;
             $this->formElements = $form->elements;
+
+            // Populate component properties from the loaded config
+            $this->grids = !empty($this->formConfig['grids'])
+                ? $this->formConfig['grids']
+                : ['col' => 4, 'gap' => 2];
+            $this->authentication = $this->formConfig['authentication'] ?? [];
+            $this->render = $this->formConfig['render'] ?? [];
+
+            // dd($this->grids, $this->formConfig, $this->formConfig['grids']);
             foreach ($this->formElements as $element) { // Assign dynamic variable on previewData
                 switch ($element['type']) {
                     case 'input-text':
@@ -52,7 +70,7 @@ class FormBuilder extends Component
             'label' => 'New ' . ucfirst($type),
             'placeholder' => '',
             'helpText' => '',
-            'colspan' => '4',
+            'colspan' => $this->grids['col'] ?? 4,
             'attr' => $type === 'text-block' ? 'p' : null,
             'options' => $options ? [
                 ['value' => 'value1', 'label' => 'Option 1'],
@@ -64,15 +82,21 @@ class FormBuilder extends Component
                 'type' =>  null,
                 'class' =>  null,
             ],
-            // 'attributes' => $type === 'button' ? [
-            //     'color' => 'green',
-            //     'type' => 'button',
-            //     'class' => $this->generateButtonClasses('green'),
-            // ] : [],
         ];
         $this->formElements[] = $newElement;
     }
 
+    public function configForm()
+    {
+
+        $this->dispatch('show-edit-modal');
+    }
+
+    public function configFormSave()
+    {
+
+        $this->dispatch('show-edit-modal');
+    }
     public function editElement($id)
     {
         $this->editingElementData = collect($this->formElements)->firstWhere('id', $id);
@@ -214,13 +238,31 @@ class FormBuilder extends Component
         $this->validate([
             'formTitle' => 'required|string|max:255',
             'formDescriptions' => 'nullable|string',
-            'formElements' => 'present|array'
+            'formElements' => 'present|array',
+            'grids.col' => 'nullable|integer|min:1|max:12',
+            'grids.gap' => 'nullable|integer|min:0|max:5',
+            'authentication.auth' => 'nullable|boolean',
+            'authentication.guest' => 'nullable|boolean',
+            'render.before.title' => 'nullable|string',
+            'render.before.body' => 'nullable|string',
+            'render.after.title' => 'nullable|string',
+            'render.after.body' => 'nullable|string',
+            'render.after.value' => 'nullable|string',
+            'render.after.method' => 'nullable|string',
         ]);
+
+        // Consolidate all configuration into a single array
+        $this->formConfig = [
+            'grids' => $this->grids,
+            'authentication' => $this->authentication,
+            'render' => $this->render,
+        ];
 
         $formData = [
             'title' => $this->formTitle,
             'descriptions' => $this->formDescriptions,
             'elements' => $this->formElements,
+            'config' => $this->formConfig,
         ];
 
         if ($this->formId) {

@@ -20,7 +20,8 @@
                 @if (in_array($type, ['button', 'separator']))
                     <x-mzm-html-builder::options.colors :editingElementData="$editingElementData" />
                 @endif
-                <x-mzm-html-builder::options.width :editingElementData="$editingElementData" />
+                <x-mzm-html-builder::options.width :grids="$grids" />
+                <x-mzm-html-builder::options.height:editingElementData="$editingElementData" />
                 <x-mzm-html-builder::options.classes :editingElementData="$editingElementData" />
             </div>
         </div>
