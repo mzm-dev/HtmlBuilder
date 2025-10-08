@@ -32,15 +32,22 @@
                         <div class="grid grid-cols-2 gap-2 mb-4">
 
                             <div class="mb-6 border border-gray-800 rounded-sm p-4 shadow-sm w-full">
-                                <div class="block text-gray-700 font-semibold mb-2">Layout (Grid)</div>
+
+
+                                <div class="flex flex-col items-start space-x-2">
+                                    <div class="block text-gray-700 font-semibold mb-1">Layout App (optional)</div>
+                                    <input type="text" wire:model.defer="grids.layout"
+                                        class="w-full h-10 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                                <p class="text-xs text-gray-500 mb-2">Exp: layout.app</p>
+                                <div class="block text-gray-700 font-semibold mb-1">Layout (Grid)</div>
                                 <div class="flex items-center space-x-2">
                                     <input type="number" wire:model.defer="grids.col" min="1" max="12"
                                         class="w-18 h-10 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                                     <input type="number" wire:model.defer="grids.gap" min="1" max="4"
                                         class="w-18 h-10 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                                 </div>
-
-                                <p class="text-xs text-gray-500">Exp: grid grid-cols-3 gap-4</p>
+                                <p class="text-xs text-gray-500 mb-2">Exp: grid grid-cols-3 gap-4</p>
                             </div>
 
                             <div class="mb-6 border border-gray-800 rounded-sm p-4 shadow-sm w-full">
@@ -53,7 +60,7 @@
                                             class="trancking-wide text-sm font-medium text-neutral-600 peer-checked:text-neutral-900 peer-disabled:cursor-not-allowed peer-disabled:opacity-70 dark:text-neutral-300 dark:peer-checked:text-white">Auth
                                             <span class="text-xs text-gray-500">(Only accessible to authenticated
                                                 users.)</span></span>
-                                        <div class="relative h-6 w-11 after:h-5 after:w-5 peer-checked:after:translate-x-5 rounded-full border border-neutral-300 bg-neutral-50 after:absolute after:bottom-0 after:left-[0.0625rem] after:top-0 after:my-auto after:rounded-full after:bg-neutral-600 after:transition-all after:content-[''] peer-checked:bg-green-500 peer-checked:after:bg-white peer-focus:outline-2 peer-focus:outline-offset-2 peer-focus:outline-neutral-800 peer-focus:peer-checked:outline-green-500 peer-active:outline-offset-0 peer-disabled:cursor-not-allowed peer-disabled:opacity-70 dark:border-neutral-700 dark:bg-neutral-900 dark:after:bg-neutral-300 dark:peer-checked:bg-green-500 dark:peer-checked:after:bg-white dark:peer-focus:outline-neutral-300 dark:peer-focus:peer-checked:outline-green-500"
+                                        <div class="relative h-6 w-11 after:h-5 after:w-5 peer-checked:after:translate-x-5 rounded-full border border-neutral-300 bg-neutral-50 after:absolute after:bottom-0 after:left-[0.0625rem] after:top-0 after:my-auto after:rounded-full after:bg-neutral-600 after:transition-all after:content-[''] peer-checked:bg-green-500 peer-checked:after:bg-white peer-focus:outline-2 peer-focus:outline-offset-2 peer-focus:outline-neutral-800 peer-focus:peer-checked:outline-green-500 peer-active:outline-offset-0 peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                             aria-hidden="true"></div>
                                     </label>
                                     <label for="toggleGuest" class="grid grid-cols-2 items-center gap-1">
@@ -63,7 +70,7 @@
                                             class="trancking-wide text-sm font-medium text-neutral-600 peer-checked:text-neutral-900 peer-disabled:cursor-not-allowed peer-disabled:opacity-70 dark:text-neutral-300 dark:peer-checked:text-white">Guest
                                             <span class="text-xs text-gray-500">(Only accessible to unauthenticated
                                                 users)</span></span>
-                                        <div class="relative h-6 w-11 after:h-5 after:w-5 peer-checked:after:translate-x-5 rounded-full border border-neutral-300 bg-neutral-50 after:absolute after:bottom-0 after:left-[0.0625rem] after:top-0 after:my-auto after:rounded-full after:bg-neutral-600 after:transition-all after:content-[''] peer-checked:bg-green-500 peer-checked:after:bg-white peer-focus:outline-2 peer-focus:outline-offset-2 peer-focus:outline-neutral-800 peer-focus:peer-checked:outline-green-500 peer-active:outline-offset-0 peer-disabled:cursor-not-allowed peer-disabled:opacity-70 dark:border-neutral-700 dark:bg-neutral-900 dark:after:bg-neutral-300 dark:peer-checked:bg-green-500 dark:peer-checked:after:bg-white dark:peer-focus:outline-neutral-300 dark:peer-focus:peer-checked:outline-green-500"
+                                        <div class="relative h-6 w-11 after:h-5 after:w-5 peer-checked:after:translate-x-5 rounded-full border border-neutral-300 bg-neutral-50 after:absolute after:bottom-0 after:left-[0.0625rem] after:top-0 after:my-auto after:rounded-full after:bg-neutral-600 after:transition-all after:content-[''] peer-checked:bg-green-500 peer-checked:after:bg-white peer-focus:outline-2 peer-focus:outline-offset-2 peer-focus:outline-neutral-800 peer-focus:peer-checked:outline-green-500 peer-active:outline-offset-0 peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                             aria-hidden="true"></div>
                                     </label>
 
@@ -94,6 +101,27 @@
                                 <div x-cloak x-show="isExpanded" id="accordionItemOne" role="region"
                                     aria-labelledby="controlsAccordionItemOne" x-collapse class="pt-2">
                                     <div class="flex flex-col p-4">
+                                        <div class="mb-3">
+                                            <!-- success Checkbox -->
+                                            <label for="toggleBeforeEnable"
+                                                class="flex items-center gap-2 text-base font-medium text-neutral-600 dark:text-neutral-300 has-checked:text-neutral-900 dark:has-checked:text-white has-disabled:opacity-75 has-disabled:cursor-not-allowed">
+                                                <span class="relative flex items-center">
+                                                    <input id="toggleBeforeEnable" type="checkbox"
+                                                        wire:model.defer="render.before.enable"
+                                                        class="before:content[''] peer relative size-5 appearance-none overflow-hidden rounded-sm border border-neutral-300 bg-neutral-50 before:absolute before:inset-0 checked:border-green-500 checked:before:bg-green-500 focus:outline-2 focus:outline-offset-2 focus:outline-neutral-800 checked:focus:outline-green-500 active:outline-offset-0 disabled:cursor-not-allowed"
+                                                        checked />
+                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                        aria-hidden="true" stroke="currentColor" fill="none"
+                                                        stroke-width="4"
+                                                        class="pointer-events-none invisible absolute left-1/2 top-1/2 size-4 -translate-x-1/2 -translate-y-1/2 text-white peer-checked:visible dark:text-white">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M4.5 12.75l6 6 9-13.5" />
+                                                    </svg>
+                                                </span>
+                                                <span>Enable</span>
+                                            </label>
+                                        </div>
+
                                         <div class="mb-3">
                                             <label for="render.before.title"
                                                 class="block text-gray-700 font-semibold mb-2">
@@ -134,6 +162,26 @@
                                 <div x-cloak x-show="isExpanded" id="accordionItemOne" role="region"
                                     aria-labelledby="controlsAccordionItemOne" x-collapse class="pt-2 bg-white">
                                     <div class="flex flex-col p-4">
+                                        <div class="mb-3">
+                                            <!-- success Checkbox -->
+                                            <label for="toggleAfterEnable"
+                                                class="flex items-center gap-2 text-base font-medium text-neutral-600 dark:text-neutral-300 has-checked:text-neutral-900 dark:has-checked:text-white has-disabled:opacity-75 has-disabled:cursor-not-allowed">
+                                                <span class="relative flex items-center">
+                                                    <input id="toggleAfterEnable" type="checkbox"
+                                                        wire:model.defer="render.after.enable"
+                                                        class="before:content[''] peer relative size-5 appearance-none overflow-hidden rounded-sm border border-neutral-300 bg-neutral-50 before:absolute before:inset-0 checked:border-green-500 checked:before:bg-green-500 focus:outline-2 focus:outline-offset-2 focus:outline-neutral-800 checked:focus:outline-green-500 active:outline-offset-0 disabled:cursor-not-allowed"
+                                                        checked />
+                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                        aria-hidden="true" stroke="currentColor" fill="none"
+                                                        stroke-width="4"
+                                                        class="pointer-events-none invisible absolute left-1/2 top-1/2 size-4 -translate-x-1/2 -translate-y-1/2 text-white peer-checked:visible dark:text-white">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M4.5 12.75l6 6 9-13.5" />
+                                                    </svg>
+                                                </span>
+                                                <span>Enable</span>
+                                            </label>
+                                        </div>
                                         <div class="mb-3">
                                             <label for="render.after.title"
                                                 class="block text-gray-700 font-semibold mb-2">

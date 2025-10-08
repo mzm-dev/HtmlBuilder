@@ -2,6 +2,7 @@
 
 namespace Mzm\HtmlBuilder\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
@@ -31,6 +32,8 @@ class FormBuilderForm extends Model
         'config',
         'elements',
     ];
+
+
 
     /**
      * The attributes that should be cast.

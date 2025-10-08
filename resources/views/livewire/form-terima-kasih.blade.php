@@ -1,4 +1,4 @@
-<div x-data="formterimakasih" class="max-w-5xl mx-auto m-4 p-4 ">
+<div class="max-w-5xl mx-auto m-4 p-4 ">
     <div id="alert-additional-content-1"
         class="p-4 mb-4 text-blue-800 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800"
         role="alert">

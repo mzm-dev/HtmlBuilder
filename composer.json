@@ -3,7 +3,7 @@
     "description": "A Livewire-based form builder package for Laravel.",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.2.0",
+    "version": "1.0.2.1",
     "authors": [
         {
             "name": "Zaki Mustafa",

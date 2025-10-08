@@ -19,7 +19,7 @@
                 @endforeach
             </select>
         </div>
-        <div class="w-1/4">
+        <div class="w-1/3">
             <label for="required_if_value" class="text-sm text-gray-600">Has the Value</label>
             <input type="text" wire:model.defer="editingElementData.validation.required_if.value"
                 id="required_if_value" placeholder="value"

@@ -14,6 +14,11 @@ class FormSubmit extends Component
 
     public $fields;
 
+    public $grids;
+    public $renderBefore;
+    public $renderAfter;
+    public $authentication;
+
     public $terimaKasih = false;
 
     public array $responses = [];
@@ -21,9 +26,20 @@ class FormSubmit extends Component
     public function mount(FormBuilderForm $form)
     {
         $this->form = $form;
-        // dd($this->form);
 
         $this->fields = $form->elements;
+
+        $this->grids = $form->config['grids'] ?? ['col' => 4, 'gap' => 2];
+
+        $this->renderBefore = $form->config['render']['before']
+            && $form->config['render']['before']['enable']
+            ? $form->config['render']['before'] : false;
+
+        $this->renderAfter = $form->config['render']['after']
+            && $form->config['render']['after']['enable']
+            ? $form->config['render']['after'] : false;
+
+        $this->authentication = $form->config['authentication'] ?? [];
 
         // Inisialkan array responses dengan nilai null
         foreach ($this->fields as $element) { // Only initialize elements that are inputs
@@ -33,6 +49,12 @@ class FormSubmit extends Component
                 }
             }
         }
+
+        $this->dispatch(
+            'render-before',
+            title: $this->renderBefore['title'] ?? 'titletitle',
+            body: $this->renderBefore['body'] ?? 'bodybody'
+        );
     }
 
     public function rules()
@@ -110,15 +132,31 @@ class FormSubmit extends Component
 
         // Reset borang dan tunjuk mesej berjaya
         $this->reset('responses');
-        $this->dispatch('formSubmitted', message: 'Borang telah berjaya dihantar!');
+        $this->dispatch(
+            'render-after',
+            title: $this->renderAfter['title'] ?? 'Borang telah berjaya dihantar!',
+            body: $this->renderAfter['body'] ?? 'Borang telah berjaya dihantar!'
+        );
     }
 
     public function redirectTo()
     {
-        if($this->form->redirectTo){
-            return redirect()->to($this->form->redirectTo ?? '/terima-kasih');
+
+        switch ($this->renderAfter['method']) {
+            case 'route':
+                return redirect()->route($this->renderAfter['value']);
+                break;
+            case 'to':
+                return redirect()->to($this->renderAfter['value']);
+                break;
+            case 'away':
+                return redirect()->away($this->renderAfter['value']);
+                break;
+
+            default:
+                $this->terimaKasih = true;
+                break;
         }
-        $this->terimaKasih = true;
     }
 
     /**
@@ -128,7 +166,7 @@ class FormSubmit extends Component
     #[Layout('mzm-html-builder::components.layouts.form-response')]
     public function render()
     {
-        if($this->terimaKasih){
+        if ($this->terimaKasih) {
             return view('mzm-html-builder::livewire.form-terima-kasih');
         }
         return view('mzm-html-builder::livewire.form-submit');

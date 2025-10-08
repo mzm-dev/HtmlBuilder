@@ -4,9 +4,10 @@
     use Mzm\HtmlBuilder\Enums\ElementType;
 @endphp
 <div x-data="formsubmit">
+
     @if ($form)
         <form wire:submit="save" class="max-w-5xl mx-auto m-4 p-4 bg-white border border-gray-100 shadow-md rounded-lg">
-            <div class="grid grid-cols-4 gap-2">
+            <div class="grid grid-cols-{{ $grids['col'] }} gap-{{ $grids['gap'] }}">
                 @foreach ($fields as $field)
                     @php
                         $colspan = $field['colspan'] ?? 4;
@@ -60,11 +61,16 @@
 
 @script
     <script>
+        //savedForm
+        Livewire.on('render-before', (event) => {
+            setTimeout(() => {
+                Swal.fire(event.title, event.body);
+            }, 500);
+        });
         Alpine.data('formsubmit', () => ({
             init() {
-                //savedForm
-                $wire.on('formSubmitted', (event) => {
-                    Swal.fire('Success', event.message).then((result) => {
+                $wire.on('render-after', (event) => {
+                    Swal.fire(event.title, event.body).then((result) => {
                         if (result.isConfirmed) {
                             $wire.redirectTo();
                         }
